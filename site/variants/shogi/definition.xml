@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Shogi</name>
+    <author>Anonymous</author>
+    <description>Classic Japanese chess.</description>
+  </metadata>
+  <pieces>
+    <piece>
+      <name>king</name>
+      <appearance shape="wedge">king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece>
+      <name>rook</name>
+      <appearance shape="wedge">rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-3</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>dragon king</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>dragon king</name>
+      <appearance orientation="inverted">rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+        <slide dir="diagonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>rook</captured_as>
+    </piece>
+    <piece>
+      <name>bishop</name>
+      <appearance shape="wedge">bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="any" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-3</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>dragon horse</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>dragon horse</name>
+      <appearance orientation="inverted">bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="any" when="any"/>
+        <slide dir="orthogonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>bishop</captured_as>
+    </piece>
+    <piece>
+      <name>gold general</name>
+      <appearance shape="wedge">circle.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1" when="any"/>
+        <slide dir="forward-diagonal" dist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>gold general (silver)</name>
+      <appearance orientation="inverted">crescent.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1" when="any"/>
+        <slide dir="forward-diagonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>silver general</captured_as>
+    </piece>
+    <piece>
+      <name>gold general (pawn)</name>
+      <appearance orientation="inverted">pawn.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1" when="any"/>
+        <slide dir="forward-diagonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>pawn</captured_as>
+    </piece>
+    <piece>
+      <name>gold general (lance)</name>
+      <appearance orientation="inverted">arrow.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1" when="any"/>
+        <slide dir="forward-diagonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>lance</captured_as>
+    </piece>
+    <piece>
+      <name>gold general (knight)</name>
+      <appearance orientation="inverted">knight.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1" when="any"/>
+        <slide dir="forward-diagonal" dist="1" when="any"/>
+      </moves>
+      <captured_as>knight</captured_as>
+    </piece>
+    <piece>
+      <name>silver general</name>
+      <appearance shape="wedge">crescent.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="1" when="any"/>
+        <slide dir="forward" dist="1" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-3</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (silver)</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>knight</name>
+      <appearance shape="wedge">knight.svg</appearance>
+      <moves>
+        <leap dir="forward" dist="2" perpdir="both" perpdist="1" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-2</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (knight)</option>
+      </promotion>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank-3</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (knight)</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>lance</name>
+      <appearance shape="wedge">arrow.svg</appearance>
+      <moves>
+        <slide dir="forward" dist="any" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (lance)</option>
+      </promotion>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-3</compare>
+          <compare var="rank" comparison="less than">max_rank</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (lance)</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>pawn</name>
+      <appearance shape="wedge">pawn.svg</appearance>
+      <moves>
+        <slide dir="forward" dist="1" when="any"/>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (pawn)</option>
+      </promotion>
+      <promotion type="end_of_move" mandatory="false">
+        <conditions>
+          <compare var="rank" comparison="greater than">max_rank-3</compare>
+          <compare var="rank" comparison="less than">max_rank</compare>
+          <compare var="piece move number" comparison="greater than">1</compare>
+        </conditions>
+        <option>gold general (pawn)</option>
+      </promotion>
+    </piece>
+  </pieces>
+  <board type="square">
+    <cells appearance="grid" rank_from="1" rank_to="9" column_from="1" column_to="9"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+    <hold_captured_pieces>true</hold_captured_pieces>
+    <drop_pieces_when>
+      <or>
+        <and>
+          <type of="self">pawn</type>
+          <compare var="rank" comparison="less than">max_rank</compare>
+          <move_causes_checkmate>false</move_causes_checkmate>
+          <num_pieces_in_range type="pawn" owner="self" rank_min="1" rank_max="max_rank" col_min="destination_column" col_max="destination_column" comparison="equals">0</num_pieces_in_range>
+        </and>
+        <and>
+          <type of="self">lance</type>
+          <compare var="rank" comparison="less than">max_rank</compare>
+        </and>
+        <and>
+          <type of="self">knight</type>
+          <compare var="rank" comparison="less than">max_rank-1</compare>
+        </and>
+        <not>
+          <type of="self">pawn</type>
+          <type of="self">lance</type>
+          <type of="self">knight</type>
+        </not>
+      </or>
+    </drop_pieces_when>
+  </rules>
+  <players>
+    <player name="black" forward_direction="north">
+      <pieces_on_board>
+        <piece type="pawn" rank="3" column="1"/>
+        <piece type="pawn" rank="3" column="2"/>
+        <piece type="pawn" rank="3" column="3"/>
+        <piece type="pawn" rank="3" column="4"/>
+        <piece type="pawn" rank="3" column="5"/>
+        <piece type="pawn" rank="3" column="6"/>
+        <piece type="pawn" rank="3" column="7"/>
+        <piece type="pawn" rank="3" column="8"/>
+        <piece type="pawn" rank="3" column="9"/>
+        <piece type="rook" rank="2" column="8"/>
+        <piece type="bishop" rank="2" column="2"/>
+        <piece type="lance" rank="1" column="1"/>
+        <piece type="knight" rank="1" column="2"/>
+        <piece type="silver general" rank="1" column="3"/>
+        <piece type="gold general" rank="1" column="4"/>
+        <piece type="king" rank="1" column="5"/>
+        <piece type="gold general" rank="1" column="6"/>
+        <piece type="silver general" rank="1" column="7"/>
+        <piece type="knight" rank="1" column="8"/>
+        <piece type="lance" rank="1" column="9"/>
+      </pieces_on_board>
+    </player>
+    <player name="white" forward_direction="south">
+      <pieces_on_board>
+        <piece type="pawn" rank="7" column="1"/>
+        <piece type="pawn" rank="7" column="2"/>
+        <piece type="pawn" rank="7" column="3"/>
+        <piece type="pawn" rank="7" column="4"/>
+        <piece type="pawn" rank="7" column="5"/>
+        <piece type="pawn" rank="7" column="6"/>
+        <piece type="pawn" rank="7" column="7"/>
+        <piece type="pawn" rank="7" column="8"/>
+        <piece type="pawn" rank="7" column="9"/>
+        <piece type="rook" rank="8" column="2"/>
+        <piece type="bishop" rank="8" column="8"/>
+        <piece type="lance" rank="9" column="1"/>
+        <piece type="knight" rank="9" column="2"/>
+        <piece type="silver general" rank="9" column="3"/>
+        <piece type="gold general" rank="9" column="4"/>
+        <piece type="king" rank="9" column="5"/>
+        <piece type="gold general" rank="9" column="6"/>
+        <piece type="silver general" rank="9" column="7"/>
+        <piece type="knight" rank="9" column="8"/>
+        <piece type="lance" rank="9" column="9"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

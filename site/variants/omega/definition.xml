@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Omega chess</name>
+    <author>Daniel MacDonald</author>
+    <description>A commercial variant that is played on a 10x10 board with an extra square in each of the extreme corners, where the wizards are placed at the start of the game. The game is laid out like orthodox chess with the addition of a "champion" in each corner and a "wizard" diagonally behind each champion.</description>
+  </metadata>
+  <pieces>
+    <piece>
+      <name>champion</name>
+      <appearance>champion.svg</appearance>
+      <moves>
+        <leap dir="any" dist="2" when="any"/>
+        <slide dir="orthogonal" dist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>wizard</name>
+      <appearance>crescent.svg</appearance>
+      <moves>
+        <leap dir="orthogonal" dist="3" perpdir="both" perpdist="1" when="any"/>
+        <slide dir="diagonal" dist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>bishop</name>
+      <appearance>bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>king</name>
+      <appearance>king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+        <sequence>
+          <slide dir="sideways" dist="2">
+            <conditions>
+              <compare var="piece move number" comparison="equals">1</compare>
+              <threatened where="whole route">false</threatened>
+            </conditions>
+          </slide>
+          <reference_piece name="castling rook" dir="same" dist="any" type="rook" owner="self"/>
+          <hop piece="castling rook" dir="opposite" dist_to_hurdle="any" dist_after_hurdle="1">
+            <conditions>
+              <compare var="piece move number" comparison="equals">1</compare>
+              <type of="hurdle">king</type>
+              <owner of="hurdle">self</owner>
+            </conditions>
+          </hop>
+        </sequence>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece symbol="N">
+      <name>knight</name>
+      <appearance>knight.svg</appearance>
+      <moves>
+        <leap dir="orthogonal" dist="2" perpdir="both" perpdist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>pawn</name>
+      <appearance>pawn.svg</appearance>
+      <moves>
+        <slide dir="forward" dist="1" when="move"/>
+        <slide dir="forward" dist="2" dist2="3" when="move">
+          <conditions>
+            <compare var="piece move number" comparison="equals">1</compare>
+          </conditions>
+        </slide>
+        <slide dir="forward-diagonal" dist="1" when="capture"/>
+        <sequence>
+          <slide dir="forward-diagonal" dist="1" when="move">
+            <conditions>
+              <compare var="rank" comparison="equals">max_rank-3</compare>
+            </conditions>
+          </slide>
+          <shoot dir="backward" dist="1">
+            <conditions>
+              <type of="target">pawn</type>
+              <compare var="game turn" comparison="equals">turn_of_target_first_move+1</compare>
+            </conditions>
+          </shoot>
+        </sequence>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank</compare>
+        </conditions>
+        <option>queen</option>
+        <option>knight</option>
+        <option>rook</option>
+        <option>bishop</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>queen</name>
+      <appearance>queen.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>rook</name>
+      <appearance>rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+  </pieces>
+  <board type="square">
+    <cells appearance="alternating" rank_from="1" rank_to="10" column_from="1" column_to="10"/>
+    <cells appearance="alternating" rank_from="0" rank_to="0" column_from="0" column_to="0"/>
+    <cells appearance="alternating" rank_from="11" rank_to="11" column_from="0" column_to="0"/>
+    <cells appearance="alternating" rank_from="0" rank_to="0" column_from="11" column_to="11"/>
+    <cells appearance="alternating" rank_from="11" rank_to="11" column_from="11" column_to="11"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+  </rules>
+  <players>
+    <player name="white" forward_direction="north">
+      <pieces_on_board>
+        <piece type="pawn" rank="2" column="1"/>
+        <piece type="pawn" rank="2" column="2"/>
+        <piece type="pawn" rank="2" column="3"/>
+        <piece type="pawn" rank="2" column="4"/>
+        <piece type="pawn" rank="2" column="5"/>
+        <piece type="pawn" rank="2" column="6"/>
+        <piece type="pawn" rank="2" column="7"/>
+        <piece type="pawn" rank="2" column="8"/>
+        <piece type="pawn" rank="2" column="9"/>
+        <piece type="pawn" rank="2" column="10"/>
+        <piece type="wizard" rank="0" column="0"/>
+        <piece type="champion" rank="1" column="1"/>
+        <piece type="rook" rank="1" column="2"/>
+        <piece type="knight" rank="1" column="3"/>
+        <piece type="bishop" rank="1" column="4"/>
+        <piece type="queen" rank="1" column="5"/>
+        <piece type="king" rank="1" column="6"/>
+        <piece type="bishop" rank="1" column="7"/>
+        <piece type="knight" rank="1" column="8"/>
+        <piece type="rook" rank="1" column="9"/>
+        <piece type="champion" rank="1" column="10"/>
+        <piece type="wizard" rank="0" column="11"/>
+      </pieces_on_board>
+    </player>
+    <player name="black" forward_direction="south">
+      <pieces_on_board>
+        <piece type="pawn" rank="9" column="1"/>
+        <piece type="pawn" rank="9" column="2"/>
+        <piece type="pawn" rank="9" column="3"/>
+        <piece type="pawn" rank="9" column="4"/>
+        <piece type="pawn" rank="9" column="5"/>
+        <piece type="pawn" rank="9" column="6"/>
+        <piece type="pawn" rank="9" column="7"/>
+        <piece type="pawn" rank="9" column="8"/>
+        <piece type="pawn" rank="9" column="9"/>
+        <piece type="pawn" rank="9" column="10"/>
+        <piece type="wizard" rank="11" column="0"/>
+        <piece type="champion" rank="10" column="1"/>
+        <piece type="rook" rank="10" column="2"/>
+        <piece type="knight" rank="10" column="3"/>
+        <piece type="bishop" rank="10" column="4"/>
+        <piece type="queen" rank="10" column="5"/>
+        <piece type="king" rank="10" column="6"/>
+        <piece type="bishop" rank="10" column="7"/>
+        <piece type="knight" rank="10" column="8"/>
+        <piece type="rook" rank="10" column="9"/>
+        <piece type="champion" rank="10" column="10"/>
+        <piece type="wizard" rank="11" column="11"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

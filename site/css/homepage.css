@@ -1,0 +1,44 @@
+#menubar
+{
+	background-color: #cccccc;
+	border-bottom: solid #666666 3px;
+	font-size: 18px;
+	padding: 4px;
+	margin: 0px 0px 8px 0px;
+	min-width:800px;
+}
+
+#menubar .menu
+{
+	padding-left: 7px;
+	padding-right: 7px;
+	margin-left: 0px;
+	margin-right: 0px;
+	border-left: 1px solid black;
+}
+
+#menubar .menu.first
+{
+	margin-left: 7px;
+	border-left: none;
+}
+
+.playButtons
+{
+	padding-top: 12px;
+}
+
+#loginForm field
+{
+	width: 100%;
+}
+
+#loginForm field label
+{
+	float: left;
+}
+
+#loginForm field input
+{
+	float: right;
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Berolina chess</name>
+    <author>Edmund Hebermann</author>
+    <description>Plays as per Orthodox chess, except that pawns are replaced by berolina pawns, which attack forward and move diagonally; the opposite of pawns.</description>
+  </metadata>
+  <pieces>
+    <piece symbol="P">
+      <name>berolina pawn</name>
+      <appearance orientation="inverted">pawn.svg</appearance>
+      <moves>
+        <slide dir="forward-diagonal" dist="1" when="move"/>
+        <slide dir="forward-diagonal" dist="2" when="move">
+          <conditions>
+            <compare var="piece move number" comparison="equals">1</compare>
+          </conditions>
+        </slide>
+        <slide dir="forward" dist="1" when="capture"/>
+        <sequence>
+          <shoot dir="sideways" dist="1">
+            <conditions>
+              <or>
+                <type of="target">berolina pawn</type>
+                <type of="target">berolina plus</type>
+              </or>
+              <compare var="game turn" comparison="equals">turn_of_target_first_move+1</compare>
+            </conditions>
+          </shoot>
+          <slide dir="forward" dist="1" when="move">
+            <conditions>
+              <compare var="rank" comparison="equals">max_rank-3</compare>
+            </conditions>
+          </slide>
+        </sequence>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank</compare>
+        </conditions>
+        <option>queen</option>
+        <option>knight</option>
+        <option>rook</option>
+        <option>bishop</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>bishop</name>
+      <appearance>bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>king</name>
+      <appearance>king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+        <sequence>
+          <slide dir="sideways" dist="2">
+            <conditions>
+              <compare var="piece move number" comparison="equals">1</compare>
+              <threatened where="whole route">false</threatened>
+            </conditions>
+          </slide>
+          <reference_piece name="castling rook" dir="same" dist="any" type="rook" owner="self"/>
+          <hop piece="castling rook" dir="opposite" dist_to_hurdle="any" dist_after_hurdle="1">
+            <conditions>
+              <compare var="piece move number" comparison="equals">1</compare>
+              <type of="hurdle">king</type>
+              <owner of="hurdle">self</owner>
+            </conditions>
+          </hop>
+        </sequence>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece symbol="N">
+      <name>knight</name>
+      <appearance>knight.svg</appearance>
+      <moves>
+        <leap dir="orthogonal" dist="2" perpdir="both" perpdist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>queen</name>
+      <appearance>queen.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>rook</name>
+      <appearance>rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+  </pieces>
+  <board type="square">
+    <cells appearance="alternating" rank_from="1" rank_to="8" column_from="1" column_to="8"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+  </rules>
+  <players>
+    <player name="white" forward_direction="north">
+      <pieces_on_board>
+        <piece type="berolina pawn" rank="2" column="1"/>
+        <piece type="berolina pawn" rank="2" column="2"/>
+        <piece type="berolina pawn" rank="2" column="3"/>
+        <piece type="berolina pawn" rank="2" column="4"/>
+        <piece type="berolina pawn" rank="2" column="5"/>
+        <piece type="berolina pawn" rank="2" column="6"/>
+        <piece type="berolina pawn" rank="2" column="7"/>
+        <piece type="berolina pawn" rank="2" column="8"/>
+        <piece type="rook" rank="1" column="1"/>
+        <piece type="knight" rank="1" column="2"/>
+        <piece type="bishop" rank="1" column="3"/>
+        <piece type="queen" rank="1" column="4"/>
+        <piece type="king" rank="1" column="5"/>
+        <piece type="bishop" rank="1" column="6"/>
+        <piece type="knight" rank="1" column="7"/>
+        <piece type="rook" rank="1" column="8"/>
+      </pieces_on_board>
+    </player>
+    <player name="black" forward_direction="south">
+      <pieces_on_board>
+        <piece type="berolina pawn" rank="7" column="1"/>
+        <piece type="berolina pawn" rank="7" column="2"/>
+        <piece type="berolina pawn" rank="7" column="3"/>
+        <piece type="berolina pawn" rank="7" column="4"/>
+        <piece type="berolina pawn" rank="7" column="5"/>
+        <piece type="berolina pawn" rank="7" column="6"/>
+        <piece type="berolina pawn" rank="7" column="7"/>
+        <piece type="berolina pawn" rank="7" column="8"/>
+        <piece type="rook" rank="8" column="1"/>
+        <piece type="knight" rank="8" column="2"/>
+        <piece type="bishop" rank="8" column="3"/>
+        <piece type="queen" rank="8" column="4"/>
+        <piece type="king" rank="8" column="5"/>
+        <piece type="bishop" rank="8" column="6"/>
+        <piece type="knight" rank="8" column="7"/>
+        <piece type="rook" rank="8" column="8"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

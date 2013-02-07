@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Xiangqi</name>
+    <author>Anonymous</author>
+    <description>Classic Chinese chess.</description>
+  </metadata>
+  <pieces>
+    <piece>
+      <name>chariot</name>
+      <appearance shape="circle">rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>horse</name>
+      <appearance shape="circle">knight.svg</appearance>
+      <moves>
+        <sequence>
+          <slide dir="orthogonal" dist="1" when="move"/>
+          <slide dir="turn-45" dist="1" when="any"/>
+        </sequence>
+      </moves>
+    </piece>
+    <piece>
+      <name>elephant</name>
+      <appearance shape="circle">elephant.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="2" when="any">
+          <conditions>
+            <compare var="destination rank" comparison="less than">6</compare>
+          </conditions>
+        </slide>
+      </moves>
+    </piece>
+    <piece>
+      <name>advisor</name>
+      <appearance shape="circle">bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="1" when="any">
+          <conditions>
+            <compare var="destination rank" comparison="less than">4</compare>
+            <compare var="destination column" comparison="greater than">3</compare>
+            <compare var="destination column" comparison="less than">7</compare>
+          </conditions>
+        </slide>
+      </moves>
+    </piece>
+    <piece>
+      <name>general</name>
+      <appearance shape="circle">king.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="1">
+          <conditions>
+            <compare var="destination rank" comparison="less than">4</compare>
+            <compare var="destination column" comparison="greater than">3</compare>
+            <compare var="destination column" comparison="less than">7</compare>
+          </conditions>
+        </slide>
+        <slide dir="forward" dist="any" when="capture">
+          <conditions>
+            <!-- it is an illegal position for two generals to face each other across an open rank - this stops any player making such a move, as they would leave themselves in check -->
+            <type of="target">general</type>
+          </conditions>
+        </slide>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece symbol="N">
+      <name>cannon</name>
+      <appearance orientation="left-90" shape="circle">rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="move"/>
+        <hop dir="orthogonal" dist_to_hurdle="any" dist_after_hurdle="any" when="capture" capture_hurdle="false">
+          <conditions>
+            <owner of="hurdle">any</owner>
+          </conditions>
+        </hop>
+      </moves>
+    </piece>
+    <piece>
+      <name>soldier</name>
+      <appearance shape="circle">pawn.svg</appearance>
+      <moves>
+        <slide dir="forward" dist="1" when="any"/>
+        <slide dir="sideways" dist="1" when="any">
+          <conditions>
+            <compare var="rank" comparison="greater than">5</compare>
+          </conditions>
+        </slide>
+      </moves>
+    </piece>
+  </pieces>
+  <board type="square">
+    <!-- draw the grid in two parts, to account for the river -->
+    <cells appearance="lines" rank_from="1" rank_to="5" column_from="1" column_to="9"/>
+    <cells appearance="lines" rank_from="6" rank_to="10" column_from="1" column_to="9"/>
+    
+    <!-- draw the forts -->
+    <line alignment="center" rank_from="1" rank_to="3" column_from="4" column_to="6"/>
+    <line alignment="center" rank_from="3" rank_to="1" column_from="4" column_to="6"/>
+    <line alignment="center" rank_from="10" rank_to="8" column_from="4" column_to="6"/>
+    <line alignment="center" rank_from="8" rank_to="10" column_from="4" column_to="6"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+  </rules>
+  <players>
+    <player name="white" forward_direction="north">
+      <pieces_on_board>
+        <piece type="chariot" rank="1" column="1"/>
+        <piece type="horse" rank="1" column="2"/>
+        <piece type="elephant" rank="1" column="3"/>
+        <piece type="advisor" rank="1" column="4"/>
+        <piece type="general" rank="1" column="5"/>
+        <piece type="advisor" rank="1" column="6"/>
+        <piece type="elephant" rank="1" column="7"/>
+        <piece type="horse" rank="1" column="8"/>
+        <piece type="chariot" rank="1" column="9"/>
+        <piece type="cannon" rank="3" column="2"/>
+        <piece type="cannon" rank="3" column="8"/>
+        <piece type="soldier" rank="4" column="1"/>
+        <piece type="soldier" rank="4" column="3"/>
+        <piece type="soldier" rank="4" column="5"/>
+        <piece type="soldier" rank="4" column="7"/>
+        <piece type="soldier" rank="4" column="9"/>
+      </pieces_on_board>
+    </player>
+    <player name="black" forward_direction="south">
+      <pieces_on_board>
+        <piece type="chariot" rank="10" column="1"/>
+        <piece type="horse" rank="10" column="2"/>
+        <piece type="elephant" rank="10" column="3"/>
+        <piece type="advisor" rank="10" column="4"/>
+        <piece type="general" rank="10" column="5"/>
+        <piece type="advisor" rank="10" column="6"/>
+        <piece type="elephant" rank="10" column="7"/>
+        <piece type="horse" rank="10" column="8"/>
+        <piece type="chariot" rank="10" column="9"/>
+        <piece type="cannon" rank="8" column="2"/>
+        <piece type="cannon" rank="8" column="8"/>
+        <piece type="soldier" rank="7" column="1"/>
+        <piece type="soldier" rank="7" column="3"/>
+        <piece type="soldier" rank="7" column="5"/>
+        <piece type="soldier" rank="7" column="7"/>
+        <piece type="soldier" rank="7" column="9"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

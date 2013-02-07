@@ -1,0 +1,360 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Zelig chess</name>
+    <author>Stan Druben</author>
+    <description>All pieces except for kings and pawns are replaced by zeligs, which move differently depending on what column of the board they occupy.</description>
+  </metadata>
+  <pieces>
+    <piece>
+      <name>king</name>
+      <appearance>king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece>
+      <name>pawn</name>
+      <appearance>pawn.svg</appearance>
+      <moves>
+        <slide dir="forward" dist="1" when="move"/>
+        <slide dir="forward" dist="2" when="move">
+          <conditions>
+            <compare var="piece move number" comparison="equals">1</compare>
+          </conditions>
+        </slide>
+        <slide dir="forward-diagonal" dist="1" when="capture"/>
+        <sequence>
+          <slide dir="forward-diagonal" dist="1" when="move">
+            <conditions>
+              <compare var="rank" comparison="equals">max_rank-3</compare>
+            </conditions>
+          </slide>
+          <shoot dir="backward" dist="1">
+            <conditions>
+              <type of="target">pawn</type>
+              <compare var="game turn" comparison="equals">turn_of_target_first_move+1</compare>
+            </conditions>
+          </shoot>
+        </sequence>
+      </moves>
+      <promotion type="end_of_move" mandatory="true">
+        <conditions>
+          <compare var="rank" comparison="equals">max_rank</compare>
+        </conditions>
+        <option>zelig</option>
+      </promotion>
+    </piece>
+    <piece>
+      <name>zelig</name>
+      <appearance>checker.svg</appearance>
+      <moves>
+        <move_like other="queen">
+          <conditions>
+            <compare var="column" comparison="equals">4</compare>
+            <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank" col_min="column" col_max="column" comparison="equals">0</num_pieces_in_range>
+          </conditions>
+        </move_like>
+
+        <move_like other="rook">
+          <conditions>
+            <or>
+              <and>
+                <compare var="column" comparison="equals">1</compare>
+                <or>
+                  <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">0</num_pieces_in_range>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">1</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">8</compare>
+                <or>
+                  <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">0</num_pieces_in_range>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">1</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">4</compare>
+                <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">1</num_pieces_in_range>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="less than">2</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="less than">2</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+            </or>
+          </conditions>
+        </move_like>
+
+        <move_like other="bishop">
+          <conditions>
+            <or>
+              <compare var="column" comparison="equals">3</compare>
+              <compare var="column" comparison="equals">6</compare>
+              <and>
+                <compare var="column" comparison="equals">1</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">2</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">1</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">8</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">2</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">1</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">4</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">2</num_pieces_in_range>
+                    <or>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                    </or>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">3</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+            </or>
+          </conditions>
+        </move_like>
+
+        <move_like other="knight">
+          <conditions>
+            <or>
+              <compare var="column" comparison="equals">2</compare>
+              <compare var="column" comparison="equals">7</compare>
+              <and>
+                <compare var="column" comparison="equals">1</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">3</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">2</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">8</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">3</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">2</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">4</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">3</num_pieces_in_range>
+                    <or>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                    </or>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="equals">4</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+            </or>
+          </conditions>
+        </move_like>
+
+        <move_like other="monarch">
+          <conditions>
+            <or>
+              <and>
+                <compare var="column" comparison="equals">1</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">3</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">2</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">8</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">3</num_pieces_in_range>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="greater than">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">2</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+              <and>
+                <compare var="column" comparison="equals">4</compare>
+                <or>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">3</num_pieces_in_range>
+                    <or>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                      <and>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="less than">2</num_pieces_in_range>
+                        <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                      </and>
+                    </or>
+                  </and>
+                  <and>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="rank-1" col_min="column" col_max="column" comparison="greater than">4</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="1" col_max="1" comparison="equals">0</num_pieces_in_range>
+                    <num_pieces_in_range type="zelig" owner="self" rank_min="1" rank_max="max_rank" col_min="8" col_max="8" comparison="equals">0</num_pieces_in_range>
+                  </and>
+                </or>
+              </and>
+            </or>
+          </conditions>
+        </move_like>
+      </moves>
+    </piece>
+    <piece>
+      <name>bishop</name>
+      <appearance>bishop.svg</appearance>
+      <moves>
+        <slide dir="diagonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>knight</name>
+      <appearance>knight.svg</appearance>
+      <moves>
+        <leap dir="orthogonal" dist="2" perpdir="both" perpdist="1" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>monarch</name>
+      <appearance>king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>queen</name>
+      <appearance>queen.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="any"/>
+      </moves>
+    </piece>
+    <piece>
+      <name>rook</name>
+      <appearance>rook.svg</appearance>
+      <moves>
+        <slide dir="orthogonal" dist="any" when="any"/>
+      </moves>
+    </piece>
+  </pieces>
+  <board type="square">
+    <cells appearance="alternating" rank_from="1" rank_to="8" column_from="1" column_to="8"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+  </rules>
+  <players>
+    <player name="white" forward_direction="north">
+      <pieces_on_board>
+        <piece type="pawn" rank="2" column="1"/>
+        <piece type="pawn" rank="2" column="2"/>
+        <piece type="pawn" rank="2" column="3"/>
+        <piece type="pawn" rank="2" column="4"/>
+        <piece type="pawn" rank="2" column="5"/>
+        <piece type="pawn" rank="2" column="6"/>
+        <piece type="pawn" rank="2" column="7"/>
+        <piece type="pawn" rank="2" column="8"/>
+        <piece type="zelig" rank="1" column="1"/>
+        <piece type="zelig" rank="1" column="2"/>
+        <piece type="zelig" rank="1" column="3"/>
+        <piece type="zelig" rank="1" column="4"/>
+        <piece type="king" rank="1" column="5"/>
+        <piece type="zelig" rank="1" column="6"/>
+        <piece type="zelig" rank="1" column="7"/>
+        <piece type="zelig" rank="1" column="8"/>
+      </pieces_on_board>
+    </player>
+    <player name="black" forward_direction="south">
+      <pieces_on_board>
+        <piece type="pawn" rank="7" column="1"/>
+        <piece type="pawn" rank="7" column="2"/>
+        <piece type="pawn" rank="7" column="3"/>
+        <piece type="pawn" rank="7" column="4"/>
+        <piece type="pawn" rank="7" column="5"/>
+        <piece type="pawn" rank="7" column="6"/>
+        <piece type="pawn" rank="7" column="7"/>
+        <piece type="pawn" rank="7" column="8"/>
+        <piece type="zelig" rank="8" column="1"/>
+        <piece type="zelig" rank="8" column="2"/>
+        <piece type="zelig" rank="8" column="3"/>
+        <piece type="zelig" rank="8" column="4"/>
+        <piece type="king" rank="8" column="5"/>
+        <piece type="zelig" rank="8" column="6"/>
+        <piece type="zelig" rank="8" column="7"/>
+        <piece type="zelig" rank="8" column="8"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

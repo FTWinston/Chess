@@ -1,0 +1,238 @@
+<?xml version="1.0"?>
+<game min_version="0.0.1">
+  <metadata>
+    <name>Ultima</name>
+    <author>Robert Abbot</author>
+    <description>Ultima was created by veteran game designer Robert Abbott and published in Recreational Mathematics Magazine in August 1962. As yet it did not have a name. Abbott later included it in his 1963 book "Abbott's New Card Games" under the title of 'Ultima'.</description>
+  </metadata>
+  <pieces>
+    <piece>
+      <name>king</name>
+      <appearance>king.svg</appearance>
+      <moves>
+        <slide dir="any" dist="1"/>
+      </moves>
+      <special>
+        <royal/>
+      </special>
+    </piece>
+    <piece>
+      <name>withdrawer</name>
+      <appearance>queen.svg</appearance>
+      <moves>
+        <sequence>
+          <slide dir="any" dist="any" when="move"/>
+          <when_possible>
+            <shoot dir="opposite" dist="prev+1">
+              <conditions>
+                <owner of="target">enemy</owner>
+              </conditions>
+            </shoot>
+          </when_possible>
+        </sequence>
+      </moves>
+    </piece>
+    <piece>
+      <name>chameleon</name>
+      <appearance>bishop.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="move"/>
+        <move_like other="target" when="capture"/>
+        <slide dir="any" dist="1" when="capture">
+          <!-- added this in so that it causes check without having to do crazy code -->
+          <conditions>
+            <type of="target">king</type>
+          </conditions>
+        </slide>
+      </moves>
+      <special>
+        <!-- added this in such that it immobilizes enemy immobilizers -->
+        <immobilize dir="any" dist="1" allow_immobilized_suicide="true">
+          <conditions>
+            <owner of="target">enemy</owner>
+            <type of="target">immobilizer</type>
+          </conditions>
+        </immobilize>
+      </special>
+    </piece>
+    <piece>
+      <name>long leaper</name>
+      <appearance>knight.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="move"/>
+        <sequence>
+          <hop dir="any" dist_to_hurdle="any" dist_after_hurdle="any" when="move" capture_hurdle="true">
+            <conditions>
+              <owner of="hurdle">enemy</owner>
+            </conditions>
+          </hop>
+          <repeat min="0" max="unbounded">
+            <hop dir="any" dist_to_hurdle="any" dist_after_hurdle="any" when="move" capture_hurdle="true">
+              <conditions>
+                <owner of="hurdle">enemy</owner>
+              </conditions>
+            </hop>
+          </repeat>
+        </sequence>
+      </moves>
+    </piece>
+    <piece>
+      <name>coordinator</name>
+      <appearance>rook.svg</appearance>
+      <moves>
+        <sequence>
+          <slide dir="any" dist="any" when="move"/>
+          <reference_piece type="king" owner="self" name="own_king"/>
+          <when_possible>
+            <arbitrary_attack row_ref="own_king" col_ref="self" row_offset="0" col_offset="0">
+              <conditions>
+                <owner of="target">enemy</owner>
+              </conditions>
+            </arbitrary_attack>
+          </when_possible>
+          <when_possible>
+            <arbitrary_attack row_ref="self" col_ref="own_king" row_offset="0" col_offset="0">
+              <conditions>
+                <owner of="target">enemy</owner>
+              </conditions>
+            </arbitrary_attack>
+          </when_possible>
+        </sequence>
+      </moves>
+    </piece>
+    <piece>
+      <name>immobilizer</name>
+      <appearance orientation="inverted">rook.svg</appearance>
+      <moves>
+        <slide dir="any" dist="any" when="move"/>
+      </moves>
+      <special>
+        <immobilize dir="any" dist="1" allow_immobilized_suicide="true">
+          <conditions>
+            <owner of="target">enemy</owner>
+          </conditions>
+        </immobilize>
+      </special>
+    </piece>
+    <piece>
+      <name>pawn</name>
+      <appearance>pawn.svg</appearance>
+      <moves>
+        <sequence>
+          <slide dir="orthogonal" dist="any" when="move"/>
+          <when_possible>
+            <reference_piece dir="forward" dist="2" name="pinner" owner="self"/>
+            <shoot dir="forward" dist="1">
+              <conditions>
+                <owner of="target">enemy</owner>
+                <or>
+                  <type of="pinner">pawn</type>
+                  <and>
+                    <type of="pinner">chameleon</type>
+                    <type of="target">pawn</type>
+                  </and>
+                </or>
+              </conditions>
+            </shoot>
+          </when_possible>
+          <when_possible>
+            <reference_piece dir="backward" dist="2" name="pinner"/>
+            <shoot dir="backward" dist="1">
+              <conditions>
+                <owner of="pinner">self</owner>
+                <owner of="target">enemy</owner>
+                <or>
+                  <type of="pinner">pawn</type>
+                  <and>
+                    <type of="pinner">chameleon</type>
+                    <type of="target">pawn</type>
+                  </and>
+                </or>
+              </conditions>
+            </shoot>
+          </when_possible>
+          <when_possible>
+            <reference_piece dir="left" dist="2" name="pinner"/>
+            <shoot dir="left" dist="1">
+              <conditions>
+                <owner of="pinner">self</owner>
+                <owner of="target">enemy</owner>
+                <or>
+                  <type of="pinner">pawn</type>
+                  <and>
+                    <type of="pinner">chameleon</type>
+                    <type of="target">pawn</type>
+                  </and>
+                </or>
+              </conditions>
+            </shoot>
+          </when_possible>
+          <when_possible>
+            <reference_piece dir="right" dist="2" name="pinner"/>
+            <shoot dir="right" dist="1">
+              <conditions>
+                <owner of="pinner">self</owner>
+                <owner of="target">enemy</owner>
+                <or>
+                  <type of="pinner">pawn</type>
+                  <and>
+                    <type of="pinner">chameleon</type>
+                    <type of="target">pawn</type>
+                  </and>
+                </or>
+              </conditions>
+            </shoot>
+          </when_possible>
+        </sequence>
+      </moves>
+    </piece>
+  </pieces>
+  <board type="square">
+    <cells appearance="alternating" rank_from="1" rank_to="8" column_from="1" column_to="8"/>
+  </board>
+  <rules>
+    <move_order>sequence</move_order>
+  </rules>
+  <players>
+    <player name="white" forward_direction="north">
+      <pieces_on_board>
+      <piece type="pawn" rank="2" column="1"/>
+      <piece type="pawn" rank="2" column="2"/>
+      <piece type="pawn" rank="2" column="3"/>
+      <piece type="pawn" rank="2" column="4"/>
+      <piece type="pawn" rank="2" column="5"/>
+      <piece type="pawn" rank="2" column="6"/>
+      <piece type="pawn" rank="2" column="7"/>
+      <piece type="pawn" rank="2" column="8"/>
+      <piece type="coordinator" rank="1" column="1"/>
+      <piece type="long leaper" rank="1" column="2"/>
+      <piece type="chameleon" rank="1" column="3"/>
+      <piece type="withdrawer" rank="1" column="4"/>
+      <piece type="king" rank="1" column="5"/>
+      <piece type="chameleon" rank="1" column="6"/>
+      <piece type="long leaper" rank="1" column="7"/>
+      <piece type="immobilizer" rank="1" column="8"/>
+      </pieces_on_board>
+    </player>
+    <player name="black" forward_direction="south">
+      <pieces_on_board>
+        <piece type="pawn" rank="7" column="1"/>
+        <piece type="pawn" rank="7" column="2"/>
+        <piece type="pawn" rank="7" column="3"/>
+        <piece type="pawn" rank="7" column="4"/>
+        <piece type="pawn" rank="7" column="5"/>
+        <piece type="pawn" rank="7" column="6"/>
+        <piece type="pawn" rank="7" column="7"/>
+        <piece type="pawn" rank="7" column="8"/>
+        <piece type="immobilizer" rank="8" column="1"/>
+        <piece type="long leaper" rank="8" column="2"/>
+        <piece type="chameleon" rank="8" column="3"/>
+        <piece type="withdrawer" rank="8" column="4"/>
+        <piece type="king" rank="8" column="5"/>
+        <piece type="chameleon" rank="8" column="6"/>
+        <piece type="long leaper" rank="8" column="7"/>
+        <piece type="coordinator" rank="8" column="8"/>
+      </pieces_on_board>
+    </player>
+  </players>
+</game>

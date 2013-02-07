@@ -1,0 +1,37 @@
+#welcome
+{
+	float: left;
+	width: 550px;
+	height: 125px;
+}
+
+#news
+{
+	clear: both;
+	float: left;
+	width: 550px;
+	height: 275px;
+}
+
+.login
+{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width:200px;
+}
+
+.field
+{
+	margin-top: 6px;
+}
+
+.fieldValue
+{
+	width: 97%;
+}
+
+.field.bottom
+{
+	text-align: center;
+}
