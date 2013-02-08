@@ -31,6 +31,7 @@ function loadVariant($definition, $variantDir)
 {
 	return '
 <link type="text/css" href="/css/game.css" rel="stylesheet" />
+<link type="text/css" href="/css/themes/low contrast.css" rel="stylesheet" />
 <script type="text/javascript" src="/js/mootools-core-1.4.5.js"></script>
 <script type="text/javascript" src="/js/core.js"></script>
 <script type="text/javascript" src="/js/xmlhelper.js"></script>
@@ -43,9 +44,7 @@ function loadVariant($definition, $variantDir)
 <script type="text/javascript" src="/js/player.js"></script>
 <script type="text/javascript" src="/js/game.js"></script>
 
-<div id="game">
-<canvas id="board">Your browser is not capable of displaying this game - please use a more modern browser (e.g. Chrome, Firefox, or Internet Explorer 9)</canvas>
-</div>
+<div id="game"></div>
 
 <div id="sidebar">
 <span id="zoomIn">Zoom in</span> <span id="zoomOut">Zoom out</span>
@@ -65,19 +64,15 @@ $(document).ready(function() {
 });
 
 function parseXml(xml) {
-	var canvas = $("#board").get(0);
-	board = new Board(canvas, ' . readFromUserSession('Prefs_CellReferences') . ', "#' . readFromUserSession('Prefs_BoardColor1') . '", "#' . readFromUserSession('Prefs_BoardColor2') . '", "#' . readFromUserSession('Prefs_BoardColor3') . '");
+	var board = new Board($("#game"), ' . readFromUserSession('Prefs_CellReferences') . ', "#' . readFromUserSession('Prefs_BoardColor1') . '", "#' . readFromUserSession('Prefs_BoardColor2') . '", "#' . readFromUserSession('Prefs_BoardColor3') . '");
 
 	game = new Game(board, xml, "' . $variantDir . '", true);
-	board.render();
-	game.board.createElementsForAllPieces();
+	game.board.render();
 }
 
 function resize(newCellSize) {
-	board.cellSize = newCellSize;
-	$(".piece").remove();
-	board.render();
-	game.board.createElementsForAllPieces();
+	game.board.cellSize = newCellSize;
+	game.board.render();
 }
 </script>';
 }

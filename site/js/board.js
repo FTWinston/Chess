@@ -16,10 +16,8 @@ function BoardCell(type) {
 }
 
 Board = new Class({
-	initialize: function(canvas, cellRefStyle, color1, color2, color3) {
-		canvas.getContext("2d").lineWidth = 1;
-		
-		this.canvas = canvas;
+	initialize: function(gameElement, cellRefStyle, color1, color2, color3) {
+		this.gameElement = gameElement;
 		this.game = null;
 		this.xMin = undefined; this.xMax = undefined;
 		this.yMin = undefined; this.yMax = undefined;
@@ -84,9 +82,8 @@ Board = new Class({
 			rightSpace += this.capturedPieceFractionOfCellSize * Math.floor(this.numPlayers / 2);
 		}
 		
-		this.canvas.width = leftSpace + rightSpace + (this.cols() * this.cellSize);
-		this.canvas.height = topSpace + bottomSpace + (this.rows() * this.cellSize);
-		$("#game").css("width", this.canvas.width).css("height", this.canvas.height);
+		this.gameElement.css("width", leftSpace + rightSpace + (this.cols() * this.cellSize));
+		this.gameElement.css("height", topSpace + bottomSpace + (this.rows() * this.cellSize));
 		this.xOffset = leftSpace;
 		this.yOffset = topSpace;
 	},
@@ -287,8 +284,17 @@ Board = new Class({
 
 	render: function() {
 		this.updateSize();
-		var ctx = this.canvas.getContext("2d");
-
+		
+		this.gameElement.find(".cell").remove();
+		this.gameElement.find(".piece").remove();
+		this.gameElement.find(".reference").remove();
+		
+		createCellElements();
+		createReferenceElements();
+		createPieceElements();
+	},
+	
+	createCellElements: function() {
 		for ( var i=0; i<this.details.length; i++ ) {
 			var detail = this.details[i];
 
@@ -298,55 +304,46 @@ Board = new Class({
 				case Board.CellRangeStyle.Alternating:
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
 						for ( var x = detail.from.x; x <= detail.to.x; x++ )
-						{
-							rect = this.getCellBounds(x, y, true);
-							if ( (x + y) % 2 == 0 )
-								ctx.fillStyle = this.color1;
-							else
-								ctx.fillStyle = this.color2;
-							ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-						}
+							createElementForCell(x, y, this.getCellBounds(x, y, rect, true), (x + y) % 2 == 0 ? "cell light" : "cell dark");
 					break;
 				case Board.CellRangeStyle.Grid:
-					// first fill the background
-					var rect = this.getRectangleForRange(detail.from, detail.to);
-					ctx.fillStyle = this.color3;
-					ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
-					var yMin; var yMax;
-					
-					// now draw the grid lines
-					if ( this.flipVertical ) {
-						yMin = detail.from.y; yMax = detail.to.y + 1;
-					}
-					else {
-						yMin = detail.from.y - 1; yMax = detail.to.y;
-					}
-					
-					ctx.strokeStyle = this.color2;
-					ctx.beginPath();
-					for ( var y = yMin; y <= yMax; y++ )
-					{
-						var startCell = this.getCellBounds(detail.from.x, y, true);
-						var endCell = this.getCellBounds(detail.to.x + 1, y, true);
-						ctx.moveTo(startCell.x,startCell.y);
-						ctx.lineTo(endCell.x,endCell.y);
-					}
-					for ( var x = detail.from.x; x <= detail.to.x + 1; x++ )
-					{
-						var startCell = this.getCellBounds(x, yMin, true);
-						var endCell = this.getCellBounds(x, yMax, true);
-						ctx.moveTo(startCell.x,startCell.y);
-						ctx.lineTo(endCell.x,endCell.y);
-					}
-					ctx.stroke();
+					// the rightmost and bottommost cells should be 1 pixel wider/taller, to account for the "extra" lines that they need to complete the grid
+					var yBottom;
+					for ( var y = detail.from.y; y <= detail.to.y; y++ )
+						for ( var x = detail.from.x; x <= detail.to.x; x++ ) {
+							var cssClass = "cell grid";
+							var rect = this.getCellBounds(x, y, rect, true)
+							
+							if ( x == detail.to.x ) {
+								cssClass += " right";
+								rect.w += 1;
+							}
+							
+							if ( y == detail.to.y ) {
+								cssClass += " bottom";
+								rect.h += 1;
+							}
+							
+							createElementForCell(x, y, rect, cssClass);
+						}
 					break;
 				case Board.CellRangeStyle.Lines:
+				// this is A LOT harder to do without canvas, or images
+				
+				/* POOOOSSIBLY do this using data URIs:
+					http://dopiaza.org/tools/datauri/index.php
+					http://jsfiddle.net/josh3736/p77S3/
+					Don't see how that would account for changing cell sizes, though
+					... unless it generated the actual data clientside, based on this:
+					http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript
+				*/
+				/*
 					// first fill the background
 					var rect = this.getRectangleForRange(detail.from, detail.to);
 					ctx.fillStyle = this.color3;
 					ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
 					
-					// now draw the lines					
+					// now draw the lines
 					ctx.strokeStyle = this.color2;
 					ctx.beginPath();
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
@@ -365,16 +362,18 @@ Board = new Class({
 					}
 					ctx.stroke();
 					break;
+					*/
 				case Board.CellRangeStyle.Plain:
-					var rect = this.getRectangleForRange(detail.from, detail.to);
-					ctx.fillStyle = this.color3;
-					ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+					for ( var y = detail.from.y; y <= detail.to.y; y++ )
+						for ( var x = detail.from.x; x <= detail.to.x; x++ )
+							createElementForCell(x, y, this.getCellBounds(x, y, rect, true), "cell plain");
 					break;
 				}
 			}
 			else if ( detail instanceof BoardLine )
 			{
-				var xToEdge; var yToEdge;
+				// these are fecking tricky without canvas, and I'd have liked to avoid images
+				/*var xToEdge; var yToEdge;
 				switch ( detail.alignment )
 				{
 				case Board.LineAlignment.Center:
@@ -427,13 +426,20 @@ Board = new Class({
 				ctx.beginPath();
 				ctx.moveTo(x1, y1);
 				ctx.lineTo(x2, y2);
-				ctx.stroke();
+				ctx.stroke();*/
 			}
 			else
-	                        throw "Unexpected board detail type, cannot render: " + detail;
+				throw "Unexpected board detail type, cannot render: " + detail;
 		}
-		
-		// now see if we should render cell references
+	},
+	
+	createElementForCell: function(x, y, rect, cssClass) {
+		// create element on this rectangle, with the given class
+		// ID should be derived form the x & y, so we know what's clicked on
+	}
+	
+	createReferenceElements: function() {
+				/*
 		if ( this.showCellReferences != Board.CellReferenceStyle.None ) {
 			var rankMin = this.getCellBounds(this.xMin, this.yMin, true);
 			var rankMax = this.getCellBounds(this.xMin, this.yMax, true);
@@ -478,14 +484,15 @@ Board = new Class({
 					ctx.fillText(Coord.columnName(x),rect.centerX(),rect.centerY());
 				}
 		}
+		*/
 	},
 	
-	createElementsForAllPieces: function() {
+	createPieceElements: function() {
 		for ( var i=0; i<this.game.players.length; i++ )
 			for ( var j=0; j<this.game.players[i].piecesOnBoard.length; j++ )
-				this.createElement(this.game.players[i].piecesOnBoard[j], this.game.variantDir);
+				this.createElementForPiece(this.game.players[i].piecesOnBoard[j], this.game.variantDir);
 		
-		$(".piece")
+		this.gameElement.find(".piece")
 		.draggable({
 			//grid: [ game.board.cellSize, game.board.cellSize ], // causes reverting drag to sometimes return to the wrong place
 			containment: "#game",
@@ -513,7 +520,7 @@ Board = new Class({
 		});
 	},
 	
-	createElement: function(piece, gameDir) {
+	createElementForPiece: function(piece, gameDir) {
 		var rect = this.getCellBounds(piece.position.x, piece.position.y, true);
 	
 		$("#game").append('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
