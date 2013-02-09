@@ -65,8 +65,7 @@ $(document).ready(function() {
 var game;
 
 function parseXml(xml) {
-	var board = new Board($("#game"), ' . readFromUserSession('Prefs_CellReferences') . ', "#' . readFromUserSession('Prefs_BoardColor1') . '", "#' . readFromUserSession('Prefs_BoardColor2') . '", "#' . readFromUserSession('Prefs_BoardColor3') . '");
-
+	var board = new Board($("#game"), ' . readFromUserSession('Prefs_CellReferences') . ');
 	game = new Game(board, xml, "' . $variantDir . '", true);
 	game.board.render();
 }

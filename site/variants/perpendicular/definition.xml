@@ -107,7 +107,15 @@
   </pieces>
   <board type="square">
     <cells appearance="alternating" rank_from="1" rank_to="9" column_from="1" column_to="9"/>
-    <line alignment="corner" rank_from="1" rank_to="9" column_from="1" column_to="9"/>
+	<detail style="diagonalBLTR" rank="1" column="1"/>
+	<detail style="diagonalBLTR" rank="2" column="2"/>
+	<detail style="diagonalBLTR" rank="3" column="3"/>
+	<detail style="diagonalBLTR" rank="4" column="4"/>
+	<detail style="diagonalBLTR" rank="5" column="5"/>
+	<detail style="diagonalBLTR" rank="6" column="6"/>
+	<detail style="diagonalBLTR" rank="7" column="7"/>
+	<detail style="diagonalBLTR" rank="8" column="8"/>
+	<detail style="diagonalBLTR" rank="9" column="9"/>
   </board>
   <rules>
     <move_order>sequence</move_order>

@@ -39,6 +39,17 @@
       <xs:enumeration value="plain" />
     </xs:restriction>
   </xs:simpleType>
+  <xs:simpleType name="cellDetail">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="diagonalBLTR" />
+      <xs:enumeration value="diagonalTLBR" />
+	  <xs:enumeration value="diagonalBoth" />
+	  <xs:enumeration value="diagonalBL" />
+      <xs:enumeration value="diagonalBR" />
+	  <xs:enumeration value="diagonalTL" />
+      <xs:enumeration value="diagonalTR" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:simpleType name="moveOrder">
     <xs:restriction base="xs:string">
       <xs:enumeration value="sequence" />
@@ -587,28 +598,26 @@
         </xs:element>
         <xs:element name="board">
           <xs:complexType>
-            <xs:sequence>
-              <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="cells">
-                  <xs:complexType>
-                    <xs:attribute name="appearance" type="cellAppearance" use="required"/>
-                    <xs:attribute name="rank_from" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="rank_to" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="column_from" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="column_to" type="xs:nonNegativeInteger" use="optional"/>
-                  </xs:complexType>
-                </xs:element>
-                <xs:element name="line">
-                  <xs:complexType>
-                    <xs:attribute name="alignment" type="lineAlignment" use="required"/>
-                    <xs:attribute name="rank_from" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="rank_to" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="column_from" type="xs:nonNegativeInteger" use="optional"/>
-                    <xs:attribute name="column_to" type="xs:nonNegativeInteger" use="optional"/>
-                  </xs:complexType>
-                </xs:element>
-              </xs:choice>
-            </xs:sequence>
+            <xs:sequence minOccurs="1" maxOccurs="unbounded">
+              <xs:element name="cells">
+                <xs:complexType>
+                  <xs:attribute name="appearance" type="cellAppearance" use="required"/>
+                  <xs:attribute name="rank_from" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="rank_to" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="column_from" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="column_to" type="xs:nonNegativeInteger" use="required"/>
+                </xs:complexType>
+              </xs:element>
+			</xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+              <xs:element name="detail">
+                <xs:complexType>
+                  <xs:attribute name="style" type="cellDetail" use="required"/>
+                  <xs:attribute name="rank" type="xs:nonNegativeInteger" use="required"/>
+                  <xs:attribute name="column" type="xs:nonNegativeInteger" use="required"/>
+                </xs:complexType>
+              </xs:element>
+			</xs:sequence>
             <xs:attribute name="type" type="boardType" use="required" fixed="square"/>
           </xs:complexType>
         </xs:element>

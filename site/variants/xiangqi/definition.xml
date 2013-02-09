@@ -100,10 +100,17 @@
     <cells appearance="lines" rank_from="6" rank_to="10" column_from="1" column_to="9"/>
     
     <!-- draw the forts -->
-    <line alignment="center" rank_from="1" rank_to="3" column_from="4" column_to="6"/>
-    <line alignment="center" rank_from="3" rank_to="1" column_from="4" column_to="6"/>
-    <line alignment="center" rank_from="10" rank_to="8" column_from="4" column_to="6"/>
-    <line alignment="center" rank_from="8" rank_to="10" column_from="4" column_to="6"/>
+	<detail style="diagonalTR" rank="1" column="4"/>
+	<detail style="diagonalTL" rank="1" column="6"/>
+	<detail style="diagonalBoth" rank="2" column="5"/>
+	<detail style="diagonalBR" rank="3" column="4"/>
+	<detail style="diagonalBL" rank="3" column="6"/>
+
+	<detail style="diagonalBR" rank="10" column="4"/>
+	<detail style="diagonalBL" rank="10" column="6"/>
+	<detail style="diagonalBoth" rank="9" column="5"/>
+	<detail style="diagonalTR" rank="8" column="4"/>
+	<detail style="diagonalTL" rank="8" column="6"/>
   </board>
   <rules>
     <move_order>sequence</move_order>

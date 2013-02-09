@@ -4,14 +4,12 @@ function BoardLine(alignment, from, to) {
 	this.alignment = alignment;
 }
 
-function CellRange(style, from, to) {
-	this.from = from;
-	this.to = to;
-	this.style = style;
-}
-
-function BoardCell(type) {
+function BoardCell(type, x, y) {
+	this.col = x; this.rank = y;
+	this.wOffset = 0; this.hOffset = 0;
 	this.type = type;
+	this.cssClass = 'cell';
+	this.interior = '';
 	this.piece = null;
 }
 
@@ -23,7 +21,6 @@ Board = new Class({
 		this.yMin = undefined; this.yMax = undefined;
 		
 		this.cells = new HashTable();
-		this.details = new Array();
 
 		this.cellSize = 50; // fixed, for now, though this should be scalable
 		this.xOffset = 2; this.yOffset = 2;
@@ -32,10 +29,6 @@ Board = new Class({
 		// these variables should come from the game mode in question
 		this.numPlayers = 2;
 		this.gameUsesHeldPieces = false;
-		
-		this.color1 = color1;
-		this.color2 = color2;
-		this.color3 = color3;
 		
 		this.showCellReferences = cellRefStyle;
 		this.showCapturedPieces = null;
@@ -140,34 +133,58 @@ Board = new Class({
 		return matches;
 	},
 	
-	addDetail: function(detail) {
-		this.details.push(detail);
-		
+	addCells: function(appearance, fromX, fromY, toX, toY) {
 		// see if we need to update our extent
-		if ( this.xMin == undefined || detail.from.x < this.xMin )
-			this.xMin = detail.from.x;
-		if ( this.xMax == undefined || detail.from.x > this.xMax )
-			this.xMax = detail.from.x;
-		if ( detail.to.x < this.xMin )
-			this.xMin = detail.to.x;
-		if ( detail.to.x > this.xMax )
-			this.xMax = detail.to.x;
+		if ( this.xMin == undefined || fromX < this.xMin )
+			this.xMin = fromX;
+		if ( this.xMax == undefined || fromX > this.xMax )
+			this.xMax = fromX;
+		if ( toX < this.xMin )
+			this.xMin = toX;
+		if ( toX > this.xMax )
+			this.xMax = toX;
 			
-		if ( this.yMin == undefined || detail.from.y < this.yMin )
-			this.yMin = detail.from.y;
-		if ( this.yMax == undefined || detail.from.y > this.yMax )
-			this.yMax = detail.from.y;
-		if ( detail.to.y < this.yMin )
-			this.yMin = detail.to.y;
-		if ( detail.to.y > this.yMax )
-			this.yMax = detail.to.y;
+		if ( this.yMin == undefined || fromY < this.yMin )
+			this.yMin = fromY;
+		if ( this.yMax == undefined || fromY > this.yMax )
+			this.yMax = fromY;
+		if ( toY < this.yMin )
+			this.yMin = toY;
+		if ( toY > this.yMax )
+			this.yMax = toY;
 		
-		// add cells if this is a cell range
-		if ( detail instanceof CellRange ) {
-			for (var x = detail.from.x; x <= detail.to.x; x++)
-				for (var y = detail.from.y; y <= detail.to.y; y++)
-					this.cells.setItem(new Coord(x, y), new BoardCell(Board.CellType.Normal));
-		}
+		// actually add the cells ... work out what classes to give them all here
+		for (var x = fromX; x <= toX; x++)
+			for (var y = fromY; y <= toY; y++) {
+				var cell = new BoardCell(Board.CellType.Normal, x, y);
+				
+				if ( appearance == 'alternating' )
+					cell.cssClass += (x + y) % 2 == 0 ? ' light' : ' dark';
+				else if ( appearance == 'grid' ) {
+					cell.cssClass += ' grid';
+					cell.hOffset = -1;
+					if ( x == toX )
+						cell.wOffset -= 1;
+				}
+				else if ( appearance == 'lines' ) {
+					cell.cssClass += ' lines';
+					cell.interior = '<div class="tl line"></div><div class="tr line"></div><div class="bl line"></div>';
+				}
+				else
+					cell.cssClass += ' ' + appearance;
+				
+				if ( x == fromX )
+					cell.cssClass += ' left';
+				else if ( x == toX )
+					cell.cssClass += ' right';
+				
+				if ( y == fromY )
+					cell.cssClass += this.flipVertical ? ' top' : ' bottom';
+				else if ( y == toY )
+					cell.cssClass += this.flipVertical ? ' bottom' : ' top';
+				
+				this.cells.setItem(new Coord(x, y), cell);
+			}
 	},
 	
 	getMaxProjectionDistance: function(coord, absDir) {
@@ -228,7 +245,6 @@ Board = new Class({
 	},
 	
 	addDetailsFromDefinition: function(xml) {
-
 		var boardDef = $(xml).children().first().children('board');
 
 		if ( $(boardDef).attr('type') != 'square' ) {
@@ -238,45 +254,44 @@ Board = new Class({
 
 		var board = this;
 		$(boardDef).children().each(function() {
-			var x1 = parseInt($(this).attr('column_from'));
-			var x2 = parseInt($(this).attr('column_to'));
-			var y1 = parseInt($(this).attr('rank_from'));
-			var y2 = parseInt($(this).attr('rank_to'));
-
 			if ( $(this).is('cells') ) {
-				var val = $(this).attr('appearance'); var appearance;
-				if ( val == 'alternating' )
-					appearance = Board.CellRangeStyle.Alternating;
-				else if ( val == 'grid' )
-					appearance = Board.CellRangeStyle.Grid;
-				else if ( val == 'lines' )
-					appearance = Board.CellRangeStyle.Lines;
-				else if ( val == 'plain' )
-					appearance = Board.CellRangeStyle.Plain;
-				else {
-					alert("Unrecognised cell range type: " + val);
-					appearance = Board.CellRangeStyle.Plain;
-				}
-				board.addDetail(new CellRange(appearance, new Coord(x1,y1), new Coord(x2,y2)));
+				var x1 = parseInt($(this).attr('column_from'));
+				var x2 = parseInt($(this).attr('column_to'));
+				var y1 = parseInt($(this).attr('rank_from'));
+				var y2 = parseInt($(this).attr('rank_to'));
+				
+				var appearance = $(this).attr('appearance');
+				board.addCells(appearance, x1, y1, x2, y2);
 			}
-			else if ( $(this).is('line') ) {
-				var val = $(this).attr('alignment'); var alignment;
-				if ( val == 'center' )
-					alignment = Board.LineAlignment.Center;
-				else if ( val == 'corner' )
-					alignment= Board.LineAlignment.Corner;
-				else if ( val == 'vertical edge' )
-					alignment= Board.LineAlignment.VerticalEdge;
-				else if ( val == 'horizontal edge' )
-					alignment= Board.LineAlignment.HorizontalEdge;
-				else {
-					alert("Unrecognised line alignment: " + val);
-					alignment = Board.LineAlignment.Corner;
-				}
-				board.addDetail(new BoardLine(alignment, new Coord(x1,y1), new Coord(x2,y2)));
+			else if ( $(this).is('detail') ) {
+				var x = parseInt($(this).attr('column'));
+				var y = parseInt($(this).attr('rank'));
+				var style = $(this).attr('style');
+				
+				// add this style onto the class of the cell at x,y
+				var cell = board.cells.getItem(new Coord(x,y));
+				if ( cell == undefined )
+					return true;
+				
+				// account for vertical flipping, where necessary
+				if ( this.flipVertical )
+					if ( style == 'diagonalBLTR' )
+						style = 'diagonalTLBR';
+					else if ( style == 'diagonalTLBR' )
+						style = 'diagonalBLTR';
+					else if ( style == 'diagonalBL' )
+						style = 'diagonalTL';
+					else if ( style == 'diagonalBR' )
+						style = 'diagonalTR';
+					else if ( style == 'diagonalTL' )
+						style = 'diagonalBL';
+					else if ( style == 'diagonalTR' )
+						style = 'diagonalBR';
+				
+				cell.cssClass += ' ' + style;
 			}
 			else {
-				alert("Cannot elements of the game board, because they were not recognised");
+				alert("Cannot render elements of the game board, because they were not recognised");
 				return true;
 			}
 		});
@@ -295,132 +310,12 @@ Board = new Class({
 	},
 	
 	createCellElements: function() {
-		for ( var i=0; i<this.details.length; i++ ) {
-			var detail = this.details[i];
-
-			if ( detail instanceof CellRange ) {
-				switch ( detail.style )
-				{
-				case Board.CellRangeStyle.Alternating:
-					for ( var y = detail.from.y; y <= detail.to.y; y++ )
-						for ( var x = detail.from.x; x <= detail.to.x; x++ )
-							this.createElementForCell(x, y, this.getCellBounds(x, y), (x + y) % 2 == 0 ? 'cell light' : 'cell dark', '');
-					break;
-				case Board.CellRangeStyle.Grid:
-					var yBottom = this.flipVertical ? detail.to.y : detail.from.y;
-					
-					for ( var y = detail.from.y; y <= detail.to.y; y++ )
-						for ( var x = detail.from.x; x <= detail.to.x; x++ ) {
-							var cssClass = 'cell grid';
-							var rect = this.getCellBounds(x, y)
-							rect.h -= 1;
-							
-							if ( x == detail.to.x ) {
-								cssClass += ' right';
-								rect.w -= 1;
-							}
-							
-							if ( y == yBottom )
-								cssClass += ' bottom';
-							
-							this.createElementForCell(x, y, rect, cssClass, '');
-						}
-					break;
-				case Board.CellRangeStyle.Lines:
-					var yBottom = this.flipVertical ? detail.to.y : detail.from.y;
-					var yTop = this.flipVertical ? detail.from.y : detail.to.y;
-					
-					for ( var y = detail.from.y; y <= detail.to.y; y++ )
-						for ( var x = detail.from.x; x <= detail.to.x; x++ ) {
-							var cssClass = 'cell lines';
-							var rect = this.getCellBounds(x, y)
-							
-							if ( x == detail.from.x )
-								cssClass += ' left';
-							else if ( x == detail.to.x )
-								cssClass += ' right';
-							
-							if ( y == yTop )
-								cssClass += ' top';
-							else if ( y == yBottom )
-								cssClass += ' bottom';
-							
-							this.createElementForCell(x, y, rect, cssClass, '<div class="tl line"></div><div class="tr line"></div><div class="bl line"></div>', '');
-						}
-					break;
-				case Board.CellRangeStyle.Plain:
-					for ( var y = detail.from.y; y <= detail.to.y; y++ )
-						for ( var x = detail.from.x; x <= detail.to.x; x++ )
-							this.createElementForCell(x, y, this.getCellBounds(x, y), 'cell plain', '');
-					break;
-				}
-			}
-			else if ( detail instanceof BoardLine )
-			{
-				// these are fecking tricky without canvas, and I'd have liked to avoid images
-				/*var xToEdge; var yToEdge;
-				switch ( detail.alignment )
-				{
-				case Board.LineAlignment.Center:
-					xToEdge = false; yToEdge = false; break;
-				case Board.LineAlignment.Corner:
-					xToEdge = true; yToEdge = true; break;
-				case Board.LineAlignment.VerticalEdge:
-					xToEdge = true; yToEdge = false; break;
-				case Board.LineAlignment.HorizontalEdge:
-					xToEdge = false; yToEdge = true; break;
-				default:
-					xToEdge = false; yToEdge = false; break;
-				}
-				
-				var from = this.getCellBounds(detail.from.x, detail.from.y);
-				var to = this.getCellBounds(detail.to.x, detail.to.y);
-				var x1; var x2; var y1; var y2;
-
-				if ( xToEdge ) {
-					if ( from.x <= to.x ) {
-						x1 = from.x;
-						x2 = to.x + to.w;
-					}
-					else {
-						x1 = from.x + from.w;
-						x2 = to.x;
-					}		
-				}
-				else {
-					x1 = from.centerX();
-					x2 = to.centerX();
-				}
-				
-				if ( yToEdge ) {
-					if ( from.y <= to.y ) {
-						y1 = from.y;
-						y2 = to.y + to.h;
-					}
-					else {
-						y1 = from.y + from.h;
-						y2 = to.y;
-					}
-				}
-				else {
-					y1 = from.centerY();
-					y2 = to.centerY();
-				}
-				
-				ctx.strokeStyle = this.color2;
-				ctx.beginPath();
-				ctx.moveTo(x1, y1);
-				ctx.lineTo(x2, y2);
-				ctx.stroke();*/
-			}
-			else
-				throw "Unexpected board detail type, cannot render: " + detail;
-		}
-	},
-	
-	createElementForCell: function(x, y, rect, cssClass, content) {
-		$('<div id="c' + x + ',' + y + '" class="' + cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + rect.w + 'px; height:' + rect.h + 'px;">' + content + '</div>')
-			.appendTo(this.gameElement);
+		var board = this;
+		this.cells.each(function(ref, cell) {
+			var rect = board.getCellBounds(cell.col, cell.rank);
+			$('<div id="c' + cell.col + ',' + cell.rank + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
+			.appendTo(board.gameElement);
+		});
 	},
 	
 	createReferenceElements: function() {
@@ -581,13 +476,6 @@ Board.LineAlignment = {
 	Corner : 1,
 	VerticalEdge : 2,
 	HorizontalEdge : 3
-}
-
-Board.CellRangeStyle = {
-	Alternating: 0,
-	Grid : 1,
-	Lines : 2,
-	Plain : 3
 }
 
 Board.CellType = {
