@@ -14,6 +14,8 @@
 .cell
 {
 	position: absolute;
+	z-index: 1;
+	background-size: 100%;
 }
 
 .cell.grid
@@ -35,49 +37,50 @@
 
 .cell.lines .line
 {
+	z-index: 2;
 	position: absolute;
 	width: 50%; height: 50%;
 	border-width: 1px;
 	border-color: inherit;
 }
 
-.cell.lines .tl
-{
-	border-right-style: solid;
-	border-bottom-style: solid;
-	left: 0px; top: 0px;
-}
-
 .cell.lines .tr
 {
-	border-bottom-style: solid;
-	right: 0px; top: 0px;
+	border-left-style: solid;
+	right: -1px; top: 0px;
 }
 
 .cell.lines .bl
 {
-	border-right-style: solid;
+	border-top-style: solid;
 	left: 0px; bottom: 0px;
 }
 
-.cell.lines.top .tl
+.cell.lines .br
 {
-	border-right-style: none;
+	border-left-style: solid;
+	border-top-style: solid;
+	right: -1px; bottom: 0px;
 }
 
-.cell.lines.left .tl
+.cell.lines.top .tr
 {
-	border-bottom-style: none;
+	border-left-style: none;
 }
 
-.cell.lines.right .tr
+.cell.lines.left .bl
 {
-	border-bottom-style: none;
+	border-top-style: none;
 }
 
-.cell.lines.bottom .bl
+.cell.lines.right .br
 {
-	border-right-style: none;
+	border-top-style: none;
+}
+
+.cell.lines.bottom .br
+{
+	border-left-style: none;
 }
 
 .reference
@@ -88,6 +91,7 @@
 
 
 .piece {
+	z-index: 5;
 	width: 100%;
 	height: 100%;
 	position: absolute;

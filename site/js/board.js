@@ -22,7 +22,7 @@ Board = new Class({
 		
 		this.cells = new HashTable();
 
-		this.cellSize = 50; // fixed, for now, though this should be scalable
+		this.cellSize = 49; // fixed, for now, though this should be scalable
 		this.xOffset = 2; this.yOffset = 2;
 		this.flipVertical = false;
 		
@@ -168,7 +168,7 @@ Board = new Class({
 				}
 				else if ( appearance == 'lines' ) {
 					cell.cssClass += ' lines';
-					cell.interior = '<div class="tl line"></div><div class="tr line"></div><div class="bl line"></div>';
+					cell.interior = '<div class="tr line" /><div class="bl line" /><div class="br line" /></div>';
 				}
 				else
 					cell.cssClass += ' ' + appearance;
