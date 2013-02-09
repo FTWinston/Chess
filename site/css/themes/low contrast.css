@@ -8,75 +8,18 @@
 	background-color: #b58863;
 }
 
-.cell.plain
+.cell.plain, .cell.grid, .cell.lines
 {
 	background-color: #d3b18c;
 }
 
-.cell.grid
+.cell.grid, .cell.lines
 {
-	background-color: #d3b18c;
-	border-left: 1px solid #b58863;
-	border-top: 1px solid #b58863;
+	border-color: #b58863;
 }
 
-.cell.grid.right
+.reference
 {
-	border-right: 1px solid #b58863;
-}
-
-.cell.grid.bottom
-{
-	border-bottom: 1px solid #b58863;
-}
-
-.cell.lines
-{
-	background-color: #d3b18c;
-	/* ... */
-}
-
-.cell.lines.all
-{
-	background-image: url('lines-all.png');
-}
-
-.cell.lines.tl
-{
-	background-image: url('lines-tl.png');
-}
-
-.cell.lines.tr
-{
-	background-image: url('lines-tr.png');
-}
-
-.cell.lines.t
-{
-	background-image: url('lines-t.png');
-}
-
-.cell.lines.l
-{
-	background-image: url('lines-l.png');
-}
-
-.cell.lines.r
-{
-	background-image: url('lines-r.png');
-}
-
-.cell.lines.bl
-{
-	background-image: url('lines-bl.png');
-}
-
-.cell.lines.br
-{
-	background-image: url('lines-br.png');
-}
-
-.cell.lines.b
-{
-	background-image: url('lines-b.png');
+	font-family: Georgia, Serif;
+	color: #cccccc;
 }

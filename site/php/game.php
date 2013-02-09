@@ -59,9 +59,10 @@ $(document).ready(function() {
 	success: parseXml
   });
   
-  $("#zoomIn").button().click(function() { resize(board.cellSize * 1.3333333333333); });
-  $("#zoomOut").button().click(function() { resize(board.cellSize * 0.75); });
+  $("#zoomIn").button().click(function() { resize(game.board.cellSize * 1.3333333333333); });
+  $("#zoomOut").button().click(function() { resize(game.board.cellSize * 0.75); });
 });
+var game;
 
 function parseXml(xml) {
 	var board = new Board($("#game"), ' . readFromUserSession('Prefs_CellReferences') . ', "#' . readFromUserSession('Prefs_BoardColor1') . '", "#' . readFromUserSession('Prefs_BoardColor2') . '", "#' . readFromUserSession('Prefs_BoardColor3') . '");

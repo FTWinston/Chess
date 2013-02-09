@@ -39,8 +39,9 @@ Game = new Class({
 			return false;
 		}
 		
-		$(".piece").remove();
-		this.board.createElementsForAllPieces();
+		// todo: removing and recreating all pieces, just to move them (and change their type) ??? that sucks
+		this.board.gameElement.find(".piece").remove();
+		this.board.createPieceElements();
 		this.board.getAllPieces().each(function(piece) {
 			piece.clearPossibleMoves();
 		});

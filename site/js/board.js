@@ -194,10 +194,10 @@ Board = new Class({
 		}
 	},
 	
-	getCellBounds: function(x, y, considerFlipVertical) {
+	getCellBounds: function(x, y) {
 		var rect;
 			
-		if ( this.flipVertical && considerFlipVertical )
+		if ( this.flipVertical )
 			rect = new Rectangle((x - this.xMin) * this.cellSize + this.xOffset, (y - this.yMin) * this.cellSize + this.yOffset, this.cellSize, this.cellSize);
 		else
 			rect = new Rectangle((x - this.xMin) * this.cellSize + this.xOffset, (this.yMax - y) * this.cellSize + this.yOffset, this.cellSize, this.cellSize);
@@ -206,8 +206,8 @@ Board = new Class({
 	},
 	
 	getRectangleForRange: function(c1, c2) {
-		var r1 = this.getCellBounds(c1.x, c1.y, true);
-		var r2 = this.getCellBounds(c2.x, c2.y, true);
+		var r1 = this.getCellBounds(c1.x, c1.y);
+		var r2 = this.getCellBounds(c2.x, c2.y);
 		
 		var xMin = Math.min(r1.x, r2.x); var xMax = Math.max(r1.x + r1.w, r2.x + r2.w);
 		var yMin = Math.min(r1.y, r2.y); var yMax = Math.max(r1.y + r1.h, r2.y + r2.h);
@@ -285,13 +285,13 @@ Board = new Class({
 	render: function() {
 		this.updateSize();
 		
-		this.gameElement.find(".cell").remove();
-		this.gameElement.find(".piece").remove();
-		this.gameElement.find(".reference").remove();
+		this.gameElement.find('.cell').remove();
+		this.gameElement.find('.piece').remove();
+		this.gameElement.find('.reference').remove();
 		
-		createCellElements();
-		createReferenceElements();
-		createPieceElements();
+		this.createCellElements();
+		this.createReferenceElements();
+		this.createPieceElements();
 	},
 	
 	createCellElements: function() {
@@ -304,69 +304,54 @@ Board = new Class({
 				case Board.CellRangeStyle.Alternating:
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
 						for ( var x = detail.from.x; x <= detail.to.x; x++ )
-							createElementForCell(x, y, this.getCellBounds(x, y, rect, true), (x + y) % 2 == 0 ? "cell light" : "cell dark");
+							this.createElementForCell(x, y, this.getCellBounds(x, y), (x + y) % 2 == 0 ? 'cell light' : 'cell dark', '');
 					break;
 				case Board.CellRangeStyle.Grid:
-					// the rightmost and bottommost cells should be 1 pixel wider/taller, to account for the "extra" lines that they need to complete the grid
-					var yBottom;
+					var yBottom = this.flipVertical ? detail.to.y : detail.from.y;
+					
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
 						for ( var x = detail.from.x; x <= detail.to.x; x++ ) {
-							var cssClass = "cell grid";
-							var rect = this.getCellBounds(x, y, rect, true)
+							var cssClass = 'cell grid';
+							var rect = this.getCellBounds(x, y)
+							rect.h -= 1;
 							
 							if ( x == detail.to.x ) {
-								cssClass += " right";
-								rect.w += 1;
+								cssClass += ' right';
+								rect.w -= 1;
 							}
 							
-							if ( y == detail.to.y ) {
-								cssClass += " bottom";
-								rect.h += 1;
-							}
+							if ( y == yBottom )
+								cssClass += ' bottom';
 							
-							createElementForCell(x, y, rect, cssClass);
+							this.createElementForCell(x, y, rect, cssClass, '');
 						}
 					break;
 				case Board.CellRangeStyle.Lines:
-				// this is A LOT harder to do without canvas, or images
-				
-				/* POOOOSSIBLY do this using data URIs:
-					http://dopiaza.org/tools/datauri/index.php
-					http://jsfiddle.net/josh3736/p77S3/
-					Don't see how that would account for changing cell sizes, though
-					... unless it generated the actual data clientside, based on this:
-					http://www.xarg.org/2010/03/generate-client-side-png-files-using-javascript
-				*/
-				/*
-					// first fill the background
-					var rect = this.getRectangleForRange(detail.from, detail.to);
-					ctx.fillStyle = this.color3;
-					ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+					var yBottom = this.flipVertical ? detail.to.y : detail.from.y;
+					var yTop = this.flipVertical ? detail.from.y : detail.to.y;
 					
-					// now draw the lines
-					ctx.strokeStyle = this.color2;
-					ctx.beginPath();
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
-					{
-						var startCell = this.getCellBounds(detail.from.x, y, true);
-						var endCell = this.getCellBounds(detail.to.x, y, true);
-						ctx.moveTo(startCell.centerX(),startCell.centerY());
-						ctx.lineTo(endCell.centerX(),endCell.centerY());
-					}
-					for ( var x = detail.from.x; x <= detail.to.x; x++ )
-					{
-						var startCell = this.getCellBounds(x, detail.from.y, true);
-						var endCell = this.getCellBounds(x, detail.to.y, true);
-						ctx.moveTo(startCell.centerX(),startCell.centerY());
-						ctx.lineTo(endCell.centerX(),endCell.centerY());
-					}
-					ctx.stroke();
+						for ( var x = detail.from.x; x <= detail.to.x; x++ ) {
+							var cssClass = 'cell lines';
+							var rect = this.getCellBounds(x, y)
+							
+							if ( x == detail.from.x )
+								cssClass += ' left';
+							else if ( x == detail.to.x )
+								cssClass += ' right';
+							
+							if ( y == yTop )
+								cssClass += ' top';
+							else if ( y == yBottom )
+								cssClass += ' bottom';
+							
+							this.createElementForCell(x, y, rect, cssClass, '<div class="tl line"></div><div class="tr line"></div><div class="bl line"></div>', '');
+						}
 					break;
-					*/
 				case Board.CellRangeStyle.Plain:
 					for ( var y = detail.from.y; y <= detail.to.y; y++ )
 						for ( var x = detail.from.x; x <= detail.to.x; x++ )
-							createElementForCell(x, y, this.getCellBounds(x, y, rect, true), "cell plain");
+							this.createElementForCell(x, y, this.getCellBounds(x, y), 'cell plain', '');
 					break;
 				}
 			}
@@ -388,8 +373,8 @@ Board = new Class({
 					xToEdge = false; yToEdge = false; break;
 				}
 				
-				var from = this.getCellBounds(detail.from.x, detail.from.y, true);
-				var to = this.getCellBounds(detail.to.x, detail.to.y, true);
+				var from = this.getCellBounds(detail.from.x, detail.from.y);
+				var to = this.getCellBounds(detail.to.x, detail.to.y);
 				var x1; var x2; var y1; var y2;
 
 				if ( xToEdge ) {
@@ -433,58 +418,58 @@ Board = new Class({
 		}
 	},
 	
-	createElementForCell: function(x, y, rect, cssClass) {
-		// create element on this rectangle, with the given class
-		// ID should be derived form the x & y, so we know what's clicked on
-	}
+	createElementForCell: function(x, y, rect, cssClass, content) {
+		$('<div id="c' + x + ',' + y + '" class="' + cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + rect.w + 'px; height:' + rect.h + 'px;">' + content + '</div>')
+			.appendTo(this.gameElement);
+	},
 	
 	createReferenceElements: function() {
-				/*
 		if ( this.showCellReferences != Board.CellReferenceStyle.None ) {
-			var rankMin = this.getCellBounds(this.xMin, this.yMin, true);
-			var rankMax = this.getCellBounds(this.xMin, this.yMax, true);
+			var rankMin = this.getCellBounds(this.xMin, this.yMin);
+			var rankMax = this.getCellBounds(this.xMin, this.yMax);
 			var topmostRank = rankMin.y < rankMax.y ? this.yMin - 1 : this.yMax + 1;
 			var bottommostRank = rankMin.y < rankMax.y ? this.yMax + 1 : this.yMin - 1;
 			
-			ctx.font = (Math.floor(this.cellSize * this.cellReferenceFractionOfCellSize) - 4) + "px Georgia";
-			ctx.fillStyle = this.color3;
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
+			var size = Math.floor(this.cellSize * this.cellReferenceFractionOfCellSize) - 4;
 			
 			// draw left side
 			for ( var y = this.yMin; y<=this.yMax; y++ ) {
-				var rect = this.getCellBounds(this.xMin - 1, y, true);
+				var rect = this.getCellBounds(this.xMin - 1, y);
 				rect.x += this.cellSize - this.cellSize * this.cellReferenceFractionOfCellSize;
 				rect.w *= this.cellReferenceFractionOfCellSize;
-				ctx.fillText(y,rect.centerX(),rect.centerY());
+				this.createElementForReference(rect, y.toString(), size);
 			}
 			
 			// draw right side
 			if ( this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var y = this.yMin; y<=this.yMax; y++ ) {
-					var rect = this.getCellBounds(this.xMax + 1, y, true);
+					var rect = this.getCellBounds(this.xMax + 1, y);
 					rect.w *= this.cellReferenceFractionOfCellSize;
-					ctx.fillText(y,rect.centerX(),rect.centerY());
+					this.createElementForReference(rect, y.toString(), size);
 				}
 				
 			// draw bottom side
 			if ( this.showCellReferences == Board.CellReferenceStyle.BottomLeft || this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var x = this.xMin; x<=this.xMax; x++ ) {
-					var rect = this.getCellBounds(x, this.yMin - 1, true);
+					var rect = this.getCellBounds(x, this.yMin - 1);
 					rect.h *= this.cellReferenceFractionOfCellSize;
-					ctx.fillText(Coord.columnName(x),rect.centerX(),rect.centerY());
+					this.createElementForReference(rect, Coord.columnName(x), size);
 				}
 				
 			// draw top side
 			if ( this.showCellReferences == Board.CellReferenceStyle.TopLeft || this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var x = this.xMin; x<=this.xMax; x++ ) {
-					var rect = this.getCellBounds(x, this.yMax + 1, true);
+					var rect = this.getCellBounds(x, this.yMax + 1);
 					rect.y += this.cellSize - this.cellSize * this.cellReferenceFractionOfCellSize;
 					rect.h *= this.cellReferenceFractionOfCellSize;
-					ctx.fillText(Coord.columnName(x),rect.centerX(),rect.centerY());
+					this.createElementForReference(rect, Coord.columnName(x), size);
 				}
 		}
-		*/
+	},
+	
+	createElementForReference: function(rect, text, size) {
+		$('<div class="reference" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + rect.w + 'px; height:' + rect.h + 'px; line-height:' + rect.h + 'px; font-size:' + size + 'px;">' + text + '</div>')
+			.appendTo(this.gameElement);
 	},
 	
 	createPieceElements: function() {
@@ -521,7 +506,7 @@ Board = new Class({
 	},
 	
 	createElementForPiece: function(piece, gameDir) {
-		var rect = this.getCellBounds(piece.position.x, piece.position.y, true);
+		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
 		$("#game").append('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' +
@@ -574,7 +559,7 @@ Board = new Class({
 	
 	createMoveMarker: function(move, number, type) {
 		var endPos = move.endPos();
-		var rect = this.getCellBounds(endPos.x, endPos.y, true);
+		var rect = this.getCellBounds(endPos.x, endPos.y);
 		
 		$("#game").append('<div id="move' + number + '" class="move ' + type + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' +
