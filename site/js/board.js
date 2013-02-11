@@ -5,7 +5,7 @@ function BoardLine(alignment, from, to) {
 }
 
 function BoardCell(type, x, y) {
-	this.col = x; this.rank = y;
+	this.coord = new Coord(x, y);
 	this.wOffset = 0; this.hOffset = 0;
 	this.type = type;
 	this.cssClass = 'cell';
@@ -183,7 +183,7 @@ Board = new Class({
 				else if ( y == toY )
 					cell.cssClass += this.flipVertical ? ' bottom' : ' top';
 				
-				this.cells.setItem(new Coord(x, y), cell);
+				this.cells.setItem(cell.coord, cell);
 			}
 	},
 	
@@ -312,8 +312,8 @@ Board = new Class({
 	createCellElements: function() {
 		var board = this;
 		this.cells.each(function(ref, cell) {
-			var rect = board.getCellBounds(cell.col, cell.rank);
-			$('<div id="c' + cell.col + ',' + cell.rank + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
+			var rect = board.getCellBounds(cell.coord.x, cell.coord.y);
+			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
 			.appendTo(board.gameElement);
 		});
 	},
@@ -403,12 +403,13 @@ Board = new Class({
 	createElementForPiece: function(piece, gameDir) {
 		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
-		$("#game").append('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
+		$('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' +
 		'width:' + rect.w + 'px; height:' + rect.h + 'px; ' +
 		'background-image:url(\'' + piece.getPieceImage(gameDir) + '\')' +
-		'"></div>');
-		$("#" + piece.position).get(0).tag = piece;
+		'"></div>')
+			.appendTo('#game')
+			.get(0).tag = piece;
 	},
 	
 	createMoveMarkers: function(piece) {
@@ -456,11 +457,11 @@ Board = new Class({
 		var endPos = move.endPos();
 		var rect = this.getCellBounds(endPos.x, endPos.y);
 		
-		$("#game").append('<div id="move' + number + '" class="move ' + type + '" style="' +
+		$('<div id="move' + number + '" class="move ' + type + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' +
-		'width:' + rect.w + 'px; height:' + rect.h + 'px;"></div>');
-		
-		$("#move" + number).get(0).tag = move;
+		'width:' + rect.w + 'px; height:' + rect.h + 'px;"></div>')
+			.appendTo('#game')
+			.get(0).tag = move;
 	},
 	
 	moveSelected: function(marker) {
@@ -470,13 +471,6 @@ Board = new Class({
 		this.game.performMove(move);
 	}
 });
-
-Board.LineAlignment = {
-	Center : 0,
-	Corner : 1,
-	VerticalEdge : 2,
-	HorizontalEdge : 3
-}
 
 Board.CellType = {
 	Normal: 0,
