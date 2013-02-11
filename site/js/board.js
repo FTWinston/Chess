@@ -159,7 +159,7 @@ Board = new Class({
 				var cell = new BoardCell(Board.CellType.Normal, x, y);
 				
 				if ( appearance == 'alternating' )
-					cell.cssClass += (x + y) % 2 == 0 ? ' light' : ' dark';
+					cell.cssClass += (x + y) % 2 == 0 ? ' dark' : ' light';
 				else if ( appearance == 'grid' ) {
 					cell.cssClass += ' grid';
 					cell.hOffset = -1;
