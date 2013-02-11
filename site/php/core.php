@@ -80,10 +80,11 @@ function startPage($title)
 	return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" >
 <head>
-<link type="text/css" href="/css/smoothness/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+<link type="text/css" href="/css/smoothness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet" />
 <link type="text/css" href="/css/common.css" rel="stylesheet" />
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script type="text/javascript" src="/js/jquery-ui-1.8.23.custom.min.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.10.0.custom.min.js"></script>
 <title>' . $title . '</title>
 </head>
 <body>
