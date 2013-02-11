@@ -1,5 +1,7 @@
+var nextPieceID = 1;
 Piece = new Class({
 	initialize: function(owner, type, pos, state) {
+		this.uniqueID = "p" + (nextPieceID++);
 		this.ownerPlayer = owner;
 		this.position = pos;
 		this.pieceType = type;

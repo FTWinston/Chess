@@ -403,7 +403,7 @@ Board = new Class({
 	createElementForPiece: function(piece, gameDir) {
 		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
-		$('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
+		$('<div id="' + piece.uniqueID + '" class="' + piece.getCssClass() + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' + 
 		'width:' + rect.w + 'px; height:' + rect.h + 'px;' +
 		'"></div>')
@@ -440,11 +440,11 @@ Board = new Class({
 		.droppable({
 			tolerance: "intersect",
 			drop: function( event, ui ) {
-				game.board.moveSelected(this);
+				game.board.moveSelected(this, false);
 			}
 		})
 		.click(function() {
-			game.board.moveSelected(this);
+			game.board.moveSelected(this, true);
 		});
 	},
 	
@@ -463,11 +463,11 @@ Board = new Class({
 			.get(0).tag = move;
 	},
 	
-	moveSelected: function(marker) {
+	moveSelected: function(marker, animate) {
 		var move = $(marker).get(0).tag;
 		this.removeAllMoveMarkers();
 		$(".piece.selected").removeClass("selected");
-		this.game.performMove(move);
+		this.game.performMove(move, animate);
 	}
 });
 

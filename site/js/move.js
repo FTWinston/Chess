@@ -10,7 +10,7 @@ PlayerAction = new Class({
 	},
 	
 	endPos: function() { return false; },
-	perform: function(game) { return false; },
+	perform: function(game, updateDisplay, animate) { return false; },
 	reverse: function(game) { return false; }
 });
 
@@ -68,9 +68,9 @@ Move = new Class({
 		return this.startPos;
 	},
 	
-	perform: function(game) {
+	perform: function(game, updateDisplay, animate) {
 		for (var i = 0; i < this.steps.length; i++)
-			if ( !this.steps[i].perform(game) ) // move failed, roll-back
+			if ( !this.steps[i].perform(game, updateDisplay, animate) ) // move failed, roll-back
 			{
 				for (var j = i - 1; j >= 0; j--)
 					if (!this.steps[j].reverse(game))
@@ -142,14 +142,22 @@ MoveStep = new Class({
 		this.appearance = null;
 	},
 	
-	perform: function(game) {
+	perform: function(game, updateDisplay, animate) {
 		if ( !this.checkStateAndRemovePiece(game, this.fromState, this.fromCoord, this.fromStateOwner) )
 			return false;
 		
-		if ( this.fromOwner != this.toOwner )
+		if ( this.fromOwner != this.toOwner ) {
 			this.piece.ownerPlayer = this.toOwner;
+			
+			if ( updateDisplay )
+				game.board.gameElement.find('#' + this.piece.uniqueID).attr('css', this.piece.getCssClass());
+		}
 		
 		this.placePiece(game, this.toState, this.toCoord, this.toStateOwner);
+		
+		if ( updateDisplay )
+			this.updateDisplay(game, animate);
+			
 		return true;
 	},
 	
@@ -216,6 +224,45 @@ MoveStep = new Class({
 		default:
 			throw "Unexpected piece state in MoveStep.placePiece: " + state;
 		}
+	},
+	
+	updateDisplay: function(game, animate) {
+		// first work out where it should be
+		var newState; var remove;
+		
+		switch (this.toState)
+		{
+		case Piece.State.OnBoard:
+			var rect = game.board.getCellBounds(this.toCoord.x, this.toCoord.y);
+			newState = {
+				top: rect.y,
+				left: rect.x
+			}
+			break;
+		case Piece.State.Captured:
+			if ( animate )
+				$('#' + this.piece.uniqueID).addClass('removing').hide('scale', {}, 'slow').animate({'opacity': 0}).removeClass('removing');
+			else
+				$('#' + this.piece.uniqueID).hide();
+			return true; // todo: move to captured location, if visible
+		case Piece.State.Held:
+			if ( animate )
+				$('#' + this.piece.uniqueID).addClass('removing').hide('scale', {}, 'slow').animate({'opacity': 0}).removeClass('removing');
+			else
+				$('#' + this.piece.uniqueID).hide();
+			return true; // todo: move to captured location, if visible
+		default:
+			throw "Unexpected piece state in MoveStep.checkStateAndRemovePiece: " + state;
+		}
+		
+		// then work out how we want to get it there
+		if ( animate ) {
+			$('#' + this.piece.uniqueID).animate(newState);
+			
+			// pause thread to allow animation?
+		}
+		else
+			$('#' + this.piece.uniqueID).css(newState);
 	}
 });
 
@@ -289,8 +336,13 @@ Promotion = new Class({
 		this.position = piece.Position;
 	},
 	
-	perform: function(game) {
+	perform: function(game, updateDisplay, animate) {
 		this.piece.type = this.toType;
+		
+		if ( updateDisplay ) {
+			game.board.gameElement.find('#' + this.piece.uniqueID).attr('css', this.piece.getCssClass());
+		}
+		
 		return true;
 	},
 	

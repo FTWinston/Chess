@@ -22,16 +22,16 @@ Game = new Class({
 		this.moveHistory = new Array();
 	},
 	
-	performMove: function(move) {
+	performMove: function(move, animate) {
 		var piece = move.piece;
 		var oldPos = piece.position;
 		
 		// todo: remove this, and replace with proper stuff!
-		// possibly move steps should update their pieces automatically anyway (though that would require a parameter, so it didn't happen for prediction)
+		// move steps should update their pieces automatically anyway (but not when predicting)
 		
 		//if ( move.moveNumber == this.moveNumber && ... && move.perform(this) )
 	
-		if ( move.perform(this) )
+		if ( move.perform(this, true, animate) )
 			console.log(piece.ownerPlayer.name + " " + piece.pieceType.name + " at " + oldPos.getName() + " moving to " + piece.position.getName()); // todo: fixme: piece position hasn't changed! eh???
 		else
 		{
@@ -40,8 +40,8 @@ Game = new Class({
 		}
 		
 		// todo: removing and recreating all pieces, just to move them (and change their type) ??? that sucks
-		this.board.gameElement.find(".piece").remove();
-		this.board.createPieceElements();
+		//this.board.gameElement.find(".piece").remove();
+		//this.board.createPieceElements();
 		this.board.getAllPieces().each(function(piece) {
 			piece.clearPossibleMoves();
 		});
@@ -51,9 +51,7 @@ Game = new Class({
 	}
 	
 	// todo: implement all the member functions here!
-	
-	// consider: if wedge backgrounds can be worked out some other way, can remove background "appearance" altogether, including the corresponding div
-	
+		
 	// note: piece images came from http://commons.wikimedia.org/wiki/Category:SVG_chess_pieces & http://commons.wikimedia.org/wiki/Category:Standard_chess_tiles has crescent etc
 });
 

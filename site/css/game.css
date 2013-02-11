@@ -93,13 +93,13 @@
 
 .move
 {
-	z-index: 5;
+	z-index: 1000;
 	position: relative;
 }
 
 .piece
 {
-	z-index: 0;
+	z-index: 1;
 	position: absolute;
 	background-position: center; 
 	background-size: 90%;
@@ -121,6 +121,11 @@
 .piece.selected
 {
 	background-color: #99ccff;
+}
+
+.piece.removing
+{
+	z-index: 0;
 }
 
 // rotation transforms. In order, the elements of each of these are: standard (no browser support), IE9, FF, Chrome/Safari, & Opera
