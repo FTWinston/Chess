@@ -66,7 +66,7 @@ Piece = new Class({
 			return this.pieceType.royalty == PieceType.RoyalState.Royal;
 		if ( strType == "antiroyal" )
 			return this.pieceType.royalty == PieceType.RoyalState.AntiRoyal;
-		return this.PieceType.Name == type;
+		return this.pieceType.name == type;
 	},
 	
 	isThreatenedAt: function(game, testPos) {
@@ -81,27 +81,9 @@ Piece = new Class({
 		return false;
 	},
 	
-	getPieceImage: function(gameDir) {
-		// images are stored in subfolders based on player name (e.g. "/variants/orthodox/white/pawn.png")
-		return gameDir + "/" + this.ownerPlayer.name + "/" + this.pieceType.image;
-	},
-	
 	getCssClass: function() {
-		return this.pieceType.orientationCss;
+		return this.pieceType.appearanceCss + ' ' + this.ownerPlayer.name;
 	},
-	
-	/* todo: let's just handle wedges as an extra background image
-	getBackingCssClass: function() {
-		switch ( this.pieceType.backingShape )
-		{
-		case PieceType.BackingShape.Circle:
-			return "backing circle";
-		case PieceType.BackingShape.Wedge:
-			return "backing wedge"; // todo: this needs to account for piece owner's forward direction (and board orientation)
-		default:
-			return "backing";
-		}
-	},*/
 });
 
 Piece.State = {

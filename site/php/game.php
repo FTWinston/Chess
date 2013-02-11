@@ -31,7 +31,8 @@ function loadVariant($definition, $variantDir)
 {
 	return '
 <link type="text/css" href="/css/game.css" rel="stylesheet" />
-<link type="text/css" href="/css/themes/low contrast.css" rel="stylesheet" />
+<link type="text/css" href="/css/board/light brown.css" rel="stylesheet" />
+<link type="text/css" href="/css/pieces temp.css" rel="stylesheet" />
 <script type="text/javascript" src="/js/mootools-core-1.4.5.js"></script>
 <script type="text/javascript" src="/js/core.js"></script>
 <script type="text/javascript" src="/js/xmlhelper.js"></script>

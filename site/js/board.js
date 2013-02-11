@@ -314,7 +314,7 @@ Board = new Class({
 		this.cells.each(function(ref, cell) {
 			var rect = board.getCellBounds(cell.coord.x, cell.coord.y);
 			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
-			.appendTo(board.gameElement);
+				.appendTo(board.gameElement);
 		});
 	},
 	
@@ -327,7 +327,7 @@ Board = new Class({
 			
 			var size = Math.floor(this.cellSize * this.cellReferenceFractionOfCellSize) - 4;
 			
-			// draw left side
+			// left side
 			for ( var y = this.yMin; y<=this.yMax; y++ ) {
 				var rect = this.getCellBounds(this.xMin - 1, y);
 				rect.x += this.cellSize - this.cellSize * this.cellReferenceFractionOfCellSize;
@@ -335,7 +335,7 @@ Board = new Class({
 				this.createElementForReference(rect, y.toString(), size);
 			}
 			
-			// draw right side
+			// right side
 			if ( this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var y = this.yMin; y<=this.yMax; y++ ) {
 					var rect = this.getCellBounds(this.xMax + 1, y);
@@ -343,7 +343,7 @@ Board = new Class({
 					this.createElementForReference(rect, y.toString(), size);
 				}
 				
-			// draw bottom side
+			// bottom side
 			if ( this.showCellReferences == Board.CellReferenceStyle.BottomLeft || this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var x = this.xMin; x<=this.xMax; x++ ) {
 					var rect = this.getCellBounds(x, this.yMin - 1);
@@ -351,7 +351,7 @@ Board = new Class({
 					this.createElementForReference(rect, Coord.columnName(x), size);
 				}
 				
-			// draw top side
+			// top side
 			if ( this.showCellReferences == Board.CellReferenceStyle.TopLeft || this.showCellReferences == Board.CellReferenceStyle.AllSides )
 				for ( var x = this.xMin; x<=this.xMax; x++ ) {
 					var rect = this.getCellBounds(x, this.yMax + 1);
@@ -404,9 +404,8 @@ Board = new Class({
 		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
 		$('<div id="' + piece.position + '" class="' + piece.getCssClass() + '" style="' +
-		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' +
-		'width:' + rect.w + 'px; height:' + rect.h + 'px; ' +
-		'background-image:url(\'' + piece.getPieceImage(gameDir) + '\')' +
+		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' + 
+		'width:' + rect.w + 'px; height:' + rect.h + 'px;' +
 		'"></div>')
 			.appendTo('#game')
 			.get(0).tag = piece;

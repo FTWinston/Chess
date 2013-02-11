@@ -8,7 +8,7 @@
   <pieces>
     <piece>
       <name>king</name>
-      <appearance>king.svg</appearance>
+      <appearance>king</appearance>
       <moves>
         <slide dir="any" dist="1"/>
       </moves>
@@ -18,7 +18,7 @@
     </piece>
     <piece>
       <name>withdrawer</name>
-      <appearance>queen.svg</appearance>
+      <appearance>queen</appearance>
       <moves>
         <sequence>
           <slide dir="any" dist="any" when="move"/>
@@ -34,7 +34,7 @@
     </piece>
     <piece>
       <name>chameleon</name>
-      <appearance>bishop.svg</appearance>
+      <appearance>bishop</appearance>
       <moves>
         <slide dir="any" dist="any" when="move"/>
         <move_like other="target" when="capture"/>
@@ -57,7 +57,7 @@
     </piece>
     <piece>
       <name>long leaper</name>
-      <appearance>knight.svg</appearance>
+      <appearance>knight</appearance>
       <moves>
         <slide dir="any" dist="any" when="move"/>
         <sequence>
@@ -78,7 +78,7 @@
     </piece>
     <piece>
       <name>coordinator</name>
-      <appearance>rook.svg</appearance>
+      <appearance>rook</appearance>
       <moves>
         <sequence>
           <slide dir="any" dist="any" when="move"/>
@@ -102,7 +102,7 @@
     </piece>
     <piece>
       <name>immobilizer</name>
-      <appearance orientation="inverted">rook.svg</appearance>
+      <appearance orientation="inverted">rook</appearance>
       <moves>
         <slide dir="any" dist="any" when="move"/>
       </moves>
@@ -116,7 +116,7 @@
     </piece>
     <piece>
       <name>pawn</name>
-      <appearance>pawn.svg</appearance>
+      <appearance>pawn</appearance>
       <moves>
         <sequence>
           <slide dir="orthogonal" dist="any" when="move"/>

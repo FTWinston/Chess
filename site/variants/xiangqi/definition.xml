@@ -8,14 +8,14 @@
   <pieces>
     <piece>
       <name>chariot</name>
-      <appearance shape="circle">rook.svg</appearance>
+      <appearance>rook</appearance>
       <moves>
         <slide dir="orthogonal" dist="any" when="any"/>
       </moves>
     </piece>
     <piece>
       <name>horse</name>
-      <appearance shape="circle">knight.svg</appearance>
+      <appearance>knight</appearance>
       <moves>
         <sequence>
           <slide dir="orthogonal" dist="1" when="move"/>
@@ -25,7 +25,7 @@
     </piece>
     <piece>
       <name>elephant</name>
-      <appearance shape="circle">elephant.svg</appearance>
+      <appearance orientation="180">knight</appearance>
       <moves>
         <slide dir="diagonal" dist="2" when="any">
           <conditions>
@@ -36,7 +36,7 @@
     </piece>
     <piece>
       <name>advisor</name>
-      <appearance shape="circle">bishop.svg</appearance>
+      <appearance>bishop</appearance>
       <moves>
         <slide dir="diagonal" dist="1" when="any">
           <conditions>
@@ -49,7 +49,7 @@
     </piece>
     <piece>
       <name>general</name>
-      <appearance shape="circle">king.svg</appearance>
+      <appearance>king</appearance>
       <moves>
         <slide dir="orthogonal" dist="1">
           <conditions>
@@ -71,7 +71,7 @@
     </piece>
     <piece symbol="N">
       <name>cannon</name>
-      <appearance orientation="left-90" shape="circle">rook.svg</appearance>
+      <appearance orientation="left-90">rook</appearance>
       <moves>
         <slide dir="orthogonal" dist="any" when="move"/>
         <hop dir="orthogonal" dist_to_hurdle="any" dist_after_hurdle="any" when="capture" capture_hurdle="false">
@@ -83,7 +83,7 @@
     </piece>
     <piece>
       <name>soldier</name>
-      <appearance shape="circle">pawn.svg</appearance>
+      <appearance>pawn</appearance>
       <moves>
         <slide dir="forward" dist="1" when="any"/>
         <slide dir="sideways" dist="1" when="any">

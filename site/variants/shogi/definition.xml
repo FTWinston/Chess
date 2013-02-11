@@ -8,7 +8,7 @@
   <pieces>
     <piece>
       <name>king</name>
-      <appearance shape="wedge">king.svg</appearance>
+      <appearance>king</appearance>
       <moves>
         <slide dir="any" dist="1"/>
       </moves>
@@ -18,7 +18,7 @@
     </piece>
     <piece>
       <name>rook</name>
-      <appearance shape="wedge">rook.svg</appearance>
+      <appearance>rook</appearance>
       <moves>
         <slide dir="orthogonal" dist="any" when="any"/>
       </moves>
@@ -32,7 +32,7 @@
     </piece>
     <piece>
       <name>dragon king</name>
-      <appearance orientation="inverted">rook.svg</appearance>
+      <appearance orientation="inverted">king</appearance>
       <moves>
         <slide dir="orthogonal" dist="any" when="any"/>
         <slide dir="diagonal" dist="1" when="any"/>
@@ -41,7 +41,7 @@
     </piece>
     <piece>
       <name>bishop</name>
-      <appearance shape="wedge">bishop.svg</appearance>
+      <appearance>bishop</appearance>
       <moves>
         <slide dir="diagonal" dist="any" when="any"/>
       </moves>
@@ -55,7 +55,7 @@
     </piece>
     <piece>
       <name>dragon horse</name>
-      <appearance orientation="inverted">bishop.svg</appearance>
+      <appearance orientation="inverted">knight</appearance>
       <moves>
         <slide dir="diagonal" dist="any" when="any"/>
         <slide dir="orthogonal" dist="1" when="any"/>
@@ -64,7 +64,7 @@
     </piece>
     <piece>
       <name>gold general</name>
-      <appearance shape="wedge">circle.svg</appearance>
+      <appearance orientation="inverted">queen</appearance>
       <moves>
         <slide dir="orthogonal" dist="1" when="any"/>
         <slide dir="forward-diagonal" dist="1" when="any"/>
@@ -72,7 +72,7 @@
     </piece>
     <piece>
       <name>gold general (silver)</name>
-      <appearance orientation="inverted">crescent.svg</appearance>
+      <appearance orientation="inverted">queen</appearance>
       <moves>
         <slide dir="orthogonal" dist="1" when="any"/>
         <slide dir="forward-diagonal" dist="1" when="any"/>
@@ -81,7 +81,7 @@
     </piece>
     <piece>
       <name>gold general (pawn)</name>
-      <appearance orientation="inverted">pawn.svg</appearance>
+      <appearance orientation="inverted">queen</appearance>
       <moves>
         <slide dir="orthogonal" dist="1" when="any"/>
         <slide dir="forward-diagonal" dist="1" when="any"/>
@@ -90,7 +90,7 @@
     </piece>
     <piece>
       <name>gold general (lance)</name>
-      <appearance orientation="inverted">arrow.svg</appearance>
+      <appearance orientation="inverted">queen</appearance>
       <moves>
         <slide dir="orthogonal" dist="1" when="any"/>
         <slide dir="forward-diagonal" dist="1" when="any"/>
@@ -99,7 +99,7 @@
     </piece>
     <piece>
       <name>gold general (knight)</name>
-      <appearance orientation="inverted">knight.svg</appearance>
+      <appearance orientation="inverted">queen</appearance>
       <moves>
         <slide dir="orthogonal" dist="1" when="any"/>
         <slide dir="forward-diagonal" dist="1" when="any"/>
@@ -108,7 +108,7 @@
     </piece>
     <piece>
       <name>silver general</name>
-      <appearance shape="wedge">crescent.svg</appearance>
+      <appearance>queen</appearance>
       <moves>
         <slide dir="diagonal" dist="1" when="any"/>
         <slide dir="forward" dist="1" when="any"/>
@@ -123,7 +123,7 @@
     </piece>
     <piece>
       <name>knight</name>
-      <appearance shape="wedge">knight.svg</appearance>
+      <appearance>knight</appearance>
       <moves>
         <leap dir="forward" dist="2" perpdir="both" perpdist="1" when="any"/>
       </moves>
@@ -144,7 +144,7 @@
     </piece>
     <piece>
       <name>lance</name>
-      <appearance shape="wedge">arrow.svg</appearance>
+      <appearance orientation="inverted">pawn</appearance>
       <moves>
         <slide dir="forward" dist="any" when="any"/>
       </moves>
@@ -166,7 +166,7 @@
     </piece>
     <piece>
       <name>pawn</name>
-      <appearance shape="wedge">pawn.svg</appearance>
+      <appearance>pawn</appearance>
       <moves>
         <slide dir="forward" dist="1" when="any"/>
       </moves>

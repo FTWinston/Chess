@@ -1,24 +1,16 @@
 PieceType = new Class({
-	initialize: function(name, symbol, image, value, orientation, backingShape, capturedAs) {
+	initialize: function(name, symbol, value, appearance, capturedAs) {
 		this.allMoves = [];
 		this.name = name;
 		this.symbol = symbol;
-		this.image = image;
 		this.value = value;
-		this.orientationCss = orientation;
-		this.backingShape = backingShape;
+		this.appearanceCss = appearance;
 		this.capturedAs = capturedAs == null ? name : capturedAs; // todo: consider: shouldn't this store the actual type, rather than its name?
 		this.royalty = PieceType.RoyalState.None;
 		this.promotionOpportunities = [];
 		this.immobilizations = [];
 	}
 });
-
-PieceType.BackingShape = {
-	Normal: 0,
-	Circle: 1,
-	Wedge: 2,
-}
 
 PieceType.RoyalState = {
 	None: 0,
@@ -59,54 +51,34 @@ PieceType.parse = function(xmlNode)
 		symbol = name.substr(0,1).toUpperCase();
 	
 	var appearanceNode = $(xmlNode).children("appearance");
-	var image = $(appearanceNode).text();
+	var appearance = 'piece ' + $(appearanceNode).text();	
 	
 	var strOrientation = $(appearanceNode).attr("orientation");
-	var orientation;
-	if ( strOrientation == undefined )
-		orientation = "piece";
-	else
+	if ( strOrientation != undefined )
 		switch (strOrientation)
 		{
 		case "normal":
-			orientation = "piece"; break;
+			break;
 		case "inverted":
-			orientation = "piece inverted"; break;
+			appearance += " inverted"; break;
 		case "mirrored":
-			orientation = "piece mirrored"; break;
+			appearance += " mirrored"; break;
 		case "left-45":
-			orientation = "piece left45"; break;
+			appearance += " left45"; break;
 		case "right-45":
-			orientation = "piece right45"; break;
+			appearance += " right45"; break;
 		case "left-90":
-			orientation = "piece left90"; break;
+			appearance += " left90"; break;
 		case "right-90":
-			orientation = "piece right90"; break;
+			appearance += " right90"; break;
 		case "left-135":
-			orientation = "piece left135"; break;
+			appearance += " left135"; break;
 		case "right-135":
-			orientation = "piece right135"; break;
+			appearance += " right135"; break;
 		case "180":
-			orientation = "piece rotate180"; break;
+			appearance += " rotate180"; break;
 		default:
-			throw "Invalid piece image orientation: " + strOrientation;
-		}
-	
-	var strBackingShape = $(appearanceNode).attr("backing");
-	var backingShape;
-	if ( strBackingShape == undefined )
-		backingShape = PieceType.BackingShape.Normal;
-	else
-		switch (strBackingShape)
-		{
-		case "normal":
-			backingShape = PieceType.BackingShape.Normal; break;
-		case "circle":
-			backingShape = PieceType.BackingShape.Circle; break;
-		case "wedge":
-			backingShape = PieceType.BackingShape.Wedge; break;
-		default:
-			throw "Invalid piece backing style: " + strBackingShape;
+			throw "Invalid piece orientation: " + strOrientation;
 		}
 	
 	var capturedAs = $(xmlNode).children("captured_as");
@@ -115,7 +87,7 @@ PieceType.parse = function(xmlNode)
 	else
 		capturedAs = $(capturedAs).text();
 
-	var type = new PieceType(name, symbol, image, value, orientation, backingShape, capturedAs);
+	var type = new PieceType(name, symbol, value, appearance, capturedAs);
 	
 	var movesNode = $(xmlNode).children("moves");
 	if ( movesNode != undefined )

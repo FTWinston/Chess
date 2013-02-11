@@ -1,0 +1,18 @@
+.black.king { background-image: url('/variants/orthodox/black/king.svg'); }
+.black.queen { background-image: url('/variants/orthodox/black/queen.svg'); }
+.black.bishop { background-image: url('/variants/orthodox/black/bishop.svg'); }
+.black.knight { background-image: url('/variants/orthodox/black/knight.svg'); }
+.black.rook { background-image: url('/variants/orthodox/black/rook.svg'); }
+.black.pawn { background-image: url('/variants/orthodox/black/pawn.svg'); }
+
+.white.king { background-image: url('/variants/orthodox/white/king.svg'); }
+.white.queen { background-image: url('/variants/orthodox/white/queen.svg'); }
+.white.bishop { background-image: url('/variants/orthodox/white/bishop.svg'); }
+.white.knight { background-image: url('/variants/orthodox/white/knight.svg'); }
+.white.rook { background-image: url('/variants/orthodox/white/rook.svg'); }
+.white.pawn { background-image: url('/variants/orthodox/white/pawn.svg'); }
+
+.black.wizard { background-image: url('/variants/omega/black/crescent.svg'); }
+.black.champion { background-image: url('/variants/omega/black/champion.svg'); }
+.white.wizard { background-image: url('/variants/omega/white/crescent.svg'); }
+.white.champion { background-image: url('/variants/omega/white/champion.svg'); }

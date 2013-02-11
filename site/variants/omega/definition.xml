@@ -8,7 +8,7 @@
   <pieces>
     <piece>
       <name>champion</name>
-      <appearance>champion.svg</appearance>
+      <appearance>champion</appearance>
       <moves>
         <leap dir="any" dist="2" when="any"/>
         <slide dir="orthogonal" dist="1" when="any"/>
@@ -16,7 +16,7 @@
     </piece>
     <piece>
       <name>wizard</name>
-      <appearance>crescent.svg</appearance>
+      <appearance>wizard</appearance>
       <moves>
         <leap dir="orthogonal" dist="3" perpdir="both" perpdist="1" when="any"/>
         <slide dir="diagonal" dist="1" when="any"/>
@@ -24,14 +24,14 @@
     </piece>
     <piece>
       <name>bishop</name>
-      <appearance>bishop.svg</appearance>
+      <appearance>bishop</appearance>
       <moves>
         <slide dir="diagonal" dist="any" when="any"/>
       </moves>
     </piece>
     <piece>
       <name>king</name>
-      <appearance>king.svg</appearance>
+      <appearance>king</appearance>
       <moves>
         <slide dir="any" dist="1"/>
         <sequence>
@@ -57,14 +57,14 @@
     </piece>
     <piece symbol="N">
       <name>knight</name>
-      <appearance>knight.svg</appearance>
+      <appearance>knight</appearance>
       <moves>
         <leap dir="orthogonal" dist="2" perpdir="both" perpdist="1" when="any"/>
       </moves>
     </piece>
     <piece>
       <name>pawn</name>
-      <appearance>pawn.svg</appearance>
+      <appearance>pawn</appearance>
       <moves>
         <slide dir="forward" dist="1" when="move"/>
         <slide dir="forward" dist="2" dist2="3" when="move">
@@ -99,14 +99,14 @@
     </piece>
     <piece>
       <name>queen</name>
-      <appearance>queen.svg</appearance>
+      <appearance>queen</appearance>
       <moves>
         <slide dir="any" dist="any" when="any"/>
       </moves>
     </piece>
     <piece>
       <name>rook</name>
-      <appearance>rook.svg</appearance>
+      <appearance>rook</appearance>
       <moves>
         <slide dir="orthogonal" dist="any" when="any"/>
       </moves>
