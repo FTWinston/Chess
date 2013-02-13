@@ -1,21 +1,21 @@
-.SVG.black.king { background-image: url('/variants/orthodox/black/king.svg'); }
-.SVG.black.queen { background-image: url('/variants/orthodox/black/queen.svg'); }
-.SVG.black.bishop { background-image: url('/variants/orthodox/black/bishop.svg'); }
-.SVG.black.knight { background-image: url('/variants/orthodox/black/knight.svg'); }
-.SVG.black.rook { background-image: url('/variants/orthodox/black/rook.svg'); }
-.SVG.black.pawn { background-image: url('/variants/orthodox/black/pawn.svg'); }
+.SVG .black.king { background-image: url('/variants/orthodox/black/king.svg'); }
+.SVG .black.queen { background-image: url('/variants/orthodox/black/queen.svg'); }
+.SVG .black.bishop { background-image: url('/variants/orthodox/black/bishop.svg'); }
+.SVG .black.knight { background-image: url('/variants/orthodox/black/knight.svg'); }
+.SVG .black.rook { background-image: url('/variants/orthodox/black/rook.svg'); }
+.SVG .black.pawn { background-image: url('/variants/orthodox/black/pawn.svg'); }
 
-.SVG.white.king { background-image: url('/variants/orthodox/white/king.svg'); }
-.SVG.white.queen { background-image: url('/variants/orthodox/white/queen.svg'); }
-.SVG.white.bishop { background-image: url('/variants/orthodox/white/bishop.svg'); }
-.SVG.white.knight { background-image: url('/variants/orthodox/white/knight.svg'); }
-.SVG.white.rook { background-image: url('/variants/orthodox/white/rook.svg'); }
-.SVG.white.pawn { background-image: url('/variants/orthodox/white/pawn.svg'); }
+.SVG .white.king { background-image: url('/variants/orthodox/white/king.svg'); }
+.SVG .white.queen { background-image: url('/variants/orthodox/white/queen.svg'); }
+.SVG .white.bishop { background-image: url('/variants/orthodox/white/bishop.svg'); }
+.SVG .white.knight { background-image: url('/variants/orthodox/white/knight.svg'); }
+.SVG .white.rook { background-image: url('/variants/orthodox/white/rook.svg'); }
+.SVG .white.pawn { background-image: url('/variants/orthodox/white/pawn.svg'); }
 
-.SVG.black.wizard { background-image: url('/variants/omega/black/crescent.svg'); }
-.SVG.black.champion { background-image: url('/variants/omega/black/champion.svg'); }
-.SVG.white.wizard { background-image: url('/variants/omega/white/crescent.svg'); }
-.SVG.white.champion { background-image: url('/variants/omega/white/champion.svg'); }
+.SVG .black.wizard { background-image: url('/variants/omega/black/crescent.svg'); }
+.SVG .black.champion { background-image: url('/variants/omega/black/champion.svg'); }
+.SVG .white.wizard { background-image: url('/variants/omega/white/crescent.svg'); }
+.SVG .white.champion { background-image: url('/variants/omega/white/champion.svg'); }
 
 /*
 .noSVG versions... !!

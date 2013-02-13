@@ -14,9 +14,9 @@ function initiateGame(definition, cellRefMode) {
 
 var game;
 function parseXml(xml) {
-	var board = new Board($("#game"), cellRefs);
+	var board = new Board($("#game"), cellRefs, supportsSVG());
 	game = new Game(board, xml, true);
-	game.board.render(supportsSVG());
+	game.board.render();
 }
 
 var zoom = 1;

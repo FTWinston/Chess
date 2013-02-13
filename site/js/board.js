@@ -14,8 +14,8 @@ function BoardCell(type, x, y) {
 }
 
 Board = new Class({
-	initialize: function(gameElement, cellRefStyle, color1, color2, color3) {
-		this.gameElement = gameElement;
+	initialize: function(gameElement, cellRefStyle, supportsSVG) {
+		this.gameElement = gameElement.addClass(supportsSVG ? 'SVG' : 'noSVG');
 		this.game = null;
 		this.xMin = undefined; this.xMax = undefined;
 		this.yMin = undefined; this.yMax = undefined;
@@ -297,24 +297,23 @@ Board = new Class({
 		});
 	},
 
-	render: function(supportsSVG) {
+	render: function() {
 		this.updateSize();
 		
 		this.gameElement.find('.cell').remove();
 		this.gameElement.find('.piece').remove();
 		this.gameElement.find('.reference').remove();
 		
-		var svg = supportsSVG ? ' SVG' : ' noSVG';
-		this.createCellElements(svg);
+		this.createCellElements();
 		this.createReferenceElements();
-		this.createPieceElements(svg);
+		this.createPieceElements();
 	},
 	
-	createCellElements: function(svg) {
+	createCellElements: function() {
 		var board = this;
 		this.cells.each(function(ref, cell) {
 			var rect = board.getCellBounds(cell.coord.x, cell.coord.y);
-			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + svg + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
+			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
 				.appendTo(board.gameElement);
 		});
 	},
@@ -368,10 +367,10 @@ Board = new Class({
 			.appendTo(this.gameElement);
 	},
 	
-	createPieceElements: function(svg) {
+	createPieceElements: function() {
 		for ( var i=0; i<this.game.players.length; i++ )
 			for ( var j=0; j<this.game.players[i].piecesOnBoard.length; j++ )
-				this.createElementForPiece(this.game.players[i].piecesOnBoard[j], this.game.variantDir, svg);
+				this.createElementForPiece(this.game.players[i].piecesOnBoard[j], this.game.variantDir);
 		
 		this.gameElement.find(".piece")
 		.draggable({
@@ -401,10 +400,10 @@ Board = new Class({
 		});
 	},
 	
-	createElementForPiece: function(piece, gameDir, svg) {
+	createElementForPiece: function(piece, gameDir) {
 		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
-		$('<div id="' + piece.uniqueID + '" class="' + piece.getCssClass() + svg + '" style="' +
+		$('<div id="' + piece.uniqueID + '" class="' + piece.getCssClass() + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' + 
 		'width:' + rect.w + 'px; height:' + rect.h + 'px;' +
 		'"></div>')
