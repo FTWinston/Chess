@@ -83,7 +83,7 @@ function startPage($title)
 <link type="text/css" href="/css/smoothness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet" />
 <link type="text/css" href="/css/common.css" rel="stylesheet" />
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.10.0.custom.min.js"></script>
 <title>' . $title . '</title>
 </head>
