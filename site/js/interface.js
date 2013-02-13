@@ -1,7 +1,6 @@
 var cellRefs;
-function initiateGame(definition, variant, cellRefMode) {
+function initiateGame(definition, cellRefMode) {
 	cellRefs = cellRefMode;
-	
 	$.ajax({
 	type: "GET",
 	url: definition,
