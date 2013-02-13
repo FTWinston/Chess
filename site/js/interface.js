@@ -17,7 +17,7 @@ var game;
 function parseXml(xml) {
 	var board = new Board($("#game"), cellRefs);
 	game = new Game(board, xml, true);
-	game.board.render();
+	game.board.render(supportsSVG());
 }
 
 var zoom = 1;
@@ -36,4 +36,8 @@ function changeZoom(zoomIn) {
 		"-webkit-transform": "scale(" + zoom + ")", // Safari and Chrome
 		"-webkit-transform-origin": "0 0"*/
 	});
+}
+
+function supportsSVG() {
+	return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect;
 }

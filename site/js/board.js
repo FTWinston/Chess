@@ -297,23 +297,24 @@ Board = new Class({
 		});
 	},
 
-	render: function() {
+	render: function(supportsSVG) {
 		this.updateSize();
 		
 		this.gameElement.find('.cell').remove();
 		this.gameElement.find('.piece').remove();
 		this.gameElement.find('.reference').remove();
 		
-		this.createCellElements();
+		var svg = supportsSVG ? ' SVG' : ' noSVG';
+		this.createCellElements(svg);
 		this.createReferenceElements();
-		this.createPieceElements();
+		this.createPieceElements(svg);
 	},
 	
-	createCellElements: function() {
+	createCellElements: function(svg) {
 		var board = this;
 		this.cells.each(function(ref, cell) {
 			var rect = board.getCellBounds(cell.coord.x, cell.coord.y);
-			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
+			$('<div id="c' + cell.coord.toString() + '" class="' + cell.cssClass + svg + '" style="top:' + rect.y + 'px; left:' + rect.x + 'px; width:' + (rect.w + cell.wOffset) + 'px; height:' + (rect.h + cell.hOffset) + 'px;">' + cell.interior + '</div>')
 				.appendTo(board.gameElement);
 		});
 	},
@@ -367,10 +368,10 @@ Board = new Class({
 			.appendTo(this.gameElement);
 	},
 	
-	createPieceElements: function() {
+	createPieceElements: function(svg) {
 		for ( var i=0; i<this.game.players.length; i++ )
 			for ( var j=0; j<this.game.players[i].piecesOnBoard.length; j++ )
-				this.createElementForPiece(this.game.players[i].piecesOnBoard[j], this.game.variantDir);
+				this.createElementForPiece(this.game.players[i].piecesOnBoard[j], this.game.variantDir, svg);
 		
 		this.gameElement.find(".piece")
 		.draggable({
@@ -400,10 +401,10 @@ Board = new Class({
 		});
 	},
 	
-	createElementForPiece: function(piece, gameDir) {
+	createElementForPiece: function(piece, gameDir, svg) {
 		var rect = this.getCellBounds(piece.position.x, piece.position.y);
 	
-		$('<div id="' + piece.uniqueID + '" class="' + piece.getCssClass() + '" style="' +
+		$('<div id="' + piece.uniqueID + '" class="' + piece.getCssClass() + svg + '" style="' +
 		'left:' + rect.x + 'px; top:' + rect.y + 'px; ' + 
 		'width:' + rect.w + 'px; height:' + rect.h + 'px;' +
 		'"></div>')
