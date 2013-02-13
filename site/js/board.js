@@ -34,6 +34,11 @@ Board = new Class({
 		this.showCapturedPieces = null;
 		this.capturedPieceFractionOfCellSize = 1.0;
 		this.cellReferenceFractionOfCellSize = 0.65;
+		
+		gameElement.click(function() {
+			game.board.removeAllMoveMarkers();
+			$(".piece.selected").removeClass("selected");
+		});
 	},
 	
 	rows: function() {
@@ -389,7 +394,7 @@ Board = new Class({
 				game.board.removeAllMoveMarkers();
 			}
 		})
-		.click(function() {
+		.click(function(event) {
 			if ( !$(this).hasClass("selected") )
 			{// deselect all others, select me
 				$(".piece.selected").removeClass("selected");
@@ -397,6 +402,7 @@ Board = new Class({
 			}
 		
 			game.board.createMoveMarkers($(this).get(0).tag);
+			event.stopPropagation();
 		});
 	},
 	
@@ -445,6 +451,7 @@ Board = new Class({
 		})
 		.click(function() {
 			game.board.moveSelected(this, true);
+			event.stopPropagation();
 		});
 	},
 	
