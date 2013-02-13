@@ -85,28 +85,30 @@
 	border-left-style: none;
 }
 
+.noSVG .diagonalTL, .noSVG .diagonalTR, .noSVG .diagonalBL, .noSVG .diagonalBR
+{
+	background-repeat: no-repeat;
+	background-size: auto;
+}
+
 .noSVG .diagonalTL
 {
 	background-position: left top;
-	background-repeat: no-repeat;
 }
 
 .noSVG .diagonalTR
 {
 	background-position: right top;
-	background-repeat: no-repeat;
 }
 
 .noSVG .diagonalBL
 {
 	background-position: left bottom;
-	background-repeat: no-repeat;
 }
 
 .noSVG .diagonalBR
 {
 	background-position: right bottom;
-	background-repeat: no-repeat;
 }
 
 .reference
