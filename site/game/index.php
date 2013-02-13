@@ -50,7 +50,7 @@ if ( $variantInfo == null )
 }
 
 echo startPage('Game ' . $gameID . ': ' . $variantInfo[0]);
-echo loadVariant($variantInfo[1], $variantInfo[2]);
+echo loadVariant($variantInfo[1]);
 
 echo endPage();
 ?>

@@ -24,10 +24,10 @@ function getVariantDefinition($variantID, $userID)
 	if(!$row)
 		return null;
 	
-	return Array($row['Name'], '/variants/' . $row['Definition'] . '/definition.xml', '/variants/' . $row['Definition']);
+	return Array($row['Name'], '/variants/' . $row['Definition'] . '/definition.xml');
 }
 
-function loadVariant($definition, $variantDir)
+function loadVariant($definition)
 {
 	return '<link type="text/css" href="/css/game.css" rel="stylesheet" />
 <link type="text/css" href="/css/board/light brown.css" rel="stylesheet" />
@@ -47,7 +47,7 @@ function loadVariant($definition, $variantDir)
 
 <script type="text/javascript">
 $(function() {
-     initiateGame("' . $definition . '", "' . $variantDir . '", ' . readFromUserSession('Prefs_CellReferences') . ');
+     initiateGame("' . $definition . '", ' . readFromUserSession('Prefs_CellReferences') . ');
 });
 </script>
 

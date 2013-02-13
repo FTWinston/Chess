@@ -1,6 +1,5 @@
-var variantDir; var cellRefs;
+var cellRefs;
 function initiateGame(definition, variant, cellRefMode) {
-	variantDir = variant;
 	cellRefs = cellRefMode;
 	
 	$.ajax({
@@ -17,7 +16,7 @@ function initiateGame(definition, variant, cellRefMode) {
 var game;
 function parseXml(xml) {
 	var board = new Board($("#game"), cellRefs);
-	game = new Game(board, xml, variantDir, true);
+	game = new Game(board, xml, true);
 	game.board.render();
 }
 

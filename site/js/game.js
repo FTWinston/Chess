@@ -1,11 +1,10 @@
 Game = new Class({
-	initialize: function(board, xml, variantDir, loadInitialPieceLayout) {
+	initialize: function(board, xml, loadInitialPieceLayout) {
 		board.addDetailsFromDefinition(xml);
 		this.board = board;
 		board.game = this;
 		
 		this.rules = Game.Rules.loadFromDefinition(xml);
-		this.variantDir = variantDir;
 		
 		this.pieceTypes = PieceType.loadDefinitions(xml); // now saving this, so <move_like other="target"/> can try out the moves of every type. COULD have it instead get the type of every piece on the board, but that's a bunch of work.
 		this.players = Player.parseAll(xml, this.pieceTypes, this.board, loadInitialPieceLayout);
