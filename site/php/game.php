@@ -29,8 +29,7 @@ function getVariantDefinition($variantID, $userID)
 
 function loadVariant($definition, $variantDir)
 {
-	return '
-<link type="text/css" href="/css/game.css" rel="stylesheet" />
+	return '<link type="text/css" href="/css/game.css" rel="stylesheet" />
 <link type="text/css" href="/css/board/light brown.css" rel="stylesheet" />
 <link type="text/css" href="/css/pieces temp.css" rel="stylesheet" />
 <script type="text/javascript" src="/js/mootools-core-1.4.5.js"></script>
@@ -44,38 +43,19 @@ function loadVariant($definition, $variantDir)
 <script type="text/javascript" src="/js/piece.js"></script>
 <script type="text/javascript" src="/js/player.js"></script>
 <script type="text/javascript" src="/js/game.js"></script>
+<script type="text/javascript" src="/js/interface.js"></script>
+
+<script type="text/javascript">
+$(function() {
+     initiateGame("' . $definition . '", "' . $variantDir . '", ' . readFromUserSession('Prefs_CellReferences') . ');
+});
+</script>
 
 <div id="game"></div>
 
-<div id="sidebar">
+<div id="gameSidebar">
 <span id="zoomIn">Zoom in</span> <span id="zoomOut">Zoom out</span>
-</div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$.ajax({
-	type: "GET",
-	url: "' . $definition . '",
-	dataType: "xml",
-	success: parseXml
-  });
-  
-  $("#zoomIn").button().click(function() { resize(game.board.cellSize * 1.3333333333333); });
-  $("#zoomOut").button().click(function() { resize(game.board.cellSize * 0.75); });
-});
-var game;
-
-function parseXml(xml) {
-	var board = new Board($("#game"), ' . readFromUserSession('Prefs_CellReferences') . ');
-	game = new Game(board, xml, "' . $variantDir . '", true);
-	game.board.render();
-}
-
-function resize(newCellSize) {
-	game.board.cellSize = newCellSize;
-	game.board.render();
-}
-</script>';
+</div>';
 }
 
 ?>
