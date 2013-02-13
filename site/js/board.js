@@ -168,7 +168,7 @@ Board = new Class({
 				}
 				else if ( appearance == 'lines' ) {
 					cell.cssClass += ' lines';
-					cell.interior = '<div class="tr line" /><div class="bl line" /><div class="br line" /></div>';
+					cell.interior = '<div class="tr line" /><div class="bl line" /><div class="br line" />';
 				}
 				else
 					cell.cssClass += ' ' + appearance;
