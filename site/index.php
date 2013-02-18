@@ -22,7 +22,7 @@ else
 		<div class="bigTitle">What do you want to play?</div>
 		
 <?
-	$query = "select ID, Name, Description from Variants where Public = 1 OR CreatedBy = :userID order by SortOrder, Name";
+	$query = "select ID, Name, Slug, Description from Variants where Public = 1 OR CreatedBy = :userID order by SortOrder, Name";
 
 	$query_params = array(
 		':userID' => $_SESSION['user']['ID']
@@ -42,7 +42,7 @@ else
 	$row = $stmt->fetch();
 	while ($row)
 	{
-		echo '<div class="panel" variantID="' . $row['ID'] . '"><div class="heading">' . $row['Name'] . '</div><div class="panelBody">' . $row['Description'] . '<div class="playButtons"><span class="playButton enabled" playType="0">Play locally</span><span class="playButton enabled" playType="1">Play vs computer</span><span class="playButton';
+		echo '<div class="panel" variant="' . $row['Slug'] . '"><div class="heading">' . $row['Name'] . '</div><div class="panelBody">' . $row['Description'] . '<div class="playButtons"><span class="playButton enabled" playType="0">Play locally</span><span class="playButton enabled" playType="1">Play vs computer</span><span class="playButton';
 		if ( $disableOnline )
 			echo ' disabled">Log in to play online';
 		else
@@ -77,7 +77,7 @@ else
 <script type="text/javascript">
 $(function() {
 	$('.playButton.enabled').button().click(function(event) {
-		var variant = $(this).parent().parent().parent().attr('variantID');
+		var variant = $(this).parent().parent().parent().attr('variant');
 	
 		var type = $(this).attr('playType');
 		if ( type == '0' ) // local

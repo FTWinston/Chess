@@ -1,12 +1,12 @@
 <?
 
-function getVariantDefinition($variantID, $userID)
+function getVariantDefinition($variantSlug, $userID)
 {
 	global $db;
-	$query = "SELECT Name, Definition FROM Variants WHERE ID = :variantID and (Public = 1 OR CreatedBy = :userID)";
+	$query = "SELECT Name FROM Variants WHERE Slug = :slug and (Public = 1 OR CreatedBy = :userID)";
 	
 	$query_params = array(
-	':variantID' => $variantID,
+	':slug' => $variantSlug,
 	':userID' => $userID
 	);
 	
@@ -24,7 +24,7 @@ function getVariantDefinition($variantID, $userID)
 	if(!$row)
 		return null;
 	
-	return Array($row['Name'], '/variants/' . $row['Definition'] . '/definition.xml');
+	return Array($row['Name'], '/variants/' . $variantSlug . '/definition.xml');
 }
 
 function loadVariant($definition)

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 07, 2013 at 05:47 PM
+-- Generation Time: Feb 18, 2013 at 04:20 PM
 -- Server version: 5.1.66-cll
 -- PHP Version: 5.2.17
 
@@ -71,9 +71,6 @@ CREATE TABLE IF NOT EXISTS `Users` (
   `Salt` char(16) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `LastOnline` int(10) unsigned NOT NULL,
   `Prefs_CellReferences` tinyint(2) unsigned NOT NULL DEFAULT '2',
-  `Prefs_BoardColor1` char(6) NOT NULL DEFAULT 'f0d9b5',
-  `Prefs_BoardColor2` char(6) NOT NULL DEFAULT 'b58863',
-  `Prefs_BoardColor3` char(6) NOT NULL DEFAULT 'cccccc',
   PRIMARY KEY (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -81,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `Users` (
 -- Dumping data for table `Users`
 --
 
-INSERT INTO `Users` (`ID`, `Name`, `Password`, `Salt`, `LastOnline`, `Prefs_CellReferences`, `Prefs_BoardColor1`, `Prefs_BoardColor2`, `Prefs_BoardColor3`) VALUES
-(1, 'FTWinston', 'b6fcb195e476349a4d617e187be414bb3f4d06f870fdd21c04d0d17aa6c1e0b8', '18320de6588f62d5', 1345396468, 2, 'f0d9b5', 'b58863', 'cccccc');
+INSERT INTO `Users` (`ID`, `Name`, `Password`, `Salt`, `LastOnline`, `Prefs_CellReferences`) VALUES
+(1, 'FTWinston', 'b6fcb195e476349a4d617e187be414bb3f4d06f870fdd21c04d0d17aa6c1e0b8', '18320de6588f62d5', 1345396468, 2);
 
 -- --------------------------------------------------------
 
@@ -95,11 +92,12 @@ CREATE TABLE IF NOT EXISTS `Variants` (
   `Name` varchar(100) NOT NULL,
   `Description` text NOT NULL,
   `SortOrder` tinyint(3) unsigned NOT NULL DEFAULT '4',
-  `Definition` varchar(100) NOT NULL,
+  `Slug` varchar(100) NOT NULL,
   `CreatedBy` int(10) unsigned DEFAULT NULL,
   `Public` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`),
+  UNIQUE KEY `Slug` (`Slug`),
   KEY `CreatedBy` (`CreatedBy`),
   KEY `Public` (`Public`),
   KEY `SortOrder` (`SortOrder`,`Name`)
@@ -109,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `Variants` (
 -- Dumping data for table `Variants`
 --
 
-INSERT INTO `Variants` (`ID`, `Name`, `Description`, `SortOrder`, `Definition`, `CreatedBy`, `Public`) VALUES
+INSERT INTO `Variants` (`ID`, `Name`, `Description`, `SortOrder`, `Slug`, `CreatedBy`, `Public`) VALUES
 (1, 'Orthodox Chess', 'Classic western chess, with en passant and castling, but currently no 3-repetition stalemate.', 1, 'orthodox', NULL, 1),
 (2, 'Xiangqi (Chinese chess)', 'Classic Chinese chess, currently lacking piece graphics.', 2, 'xiangqi', NULL, 1),
 (3, 'Shogi (Japanese chess)', 'Classic Japanese chess, currently lacking piece graphics.', 3, 'shogi', NULL, 1),
