@@ -729,7 +729,7 @@ Hop = new Class({
 						var target = game.board.getPieceAt(dest);
 
 						var captureStep = null;
-						if ( this.moveWhen == MoveDefinition.When.Capture )
+						if (this.moveWhen == MoveDefinition.When.Capture)
 						{
 							if ( target == null )
 								continue; // needs to be a capture for this to be valid, and there isn't a piece here - but there may be pieces beyond this one
@@ -738,8 +738,14 @@ Hop = new Class({
 							else
 								break; // cannot capture this piece, and also cannot move beyond it
 						}
-						else if ( this.moveWhen == MoveDefinition.When.Move && target == null )
-							continue; // needs to be a non-capture to be valid, and we're blocked by a piece, so can be no more valid moves in this direction
+						else if (this.moveWhen == MoveDefinition.When.Move)
+						{
+							if ( target != null )
+							{
+								passedTwoPieces = true;
+								break; // needs to be a non-capture to be valid, and we're blocked by a piece, so can be no more valid moves in this direction
+							}
+						}
 						else if (target != null)
 							if ( piece.canCapture(target) )
 								captureStep = MoveStep.CreateCapture(target, target.position, piece.ownerPlayer, game.rules.holdCapturedPieces);
@@ -767,6 +773,7 @@ Hop = new Class({
 							break; // have already hopped over one piece & can't pass another, so as this cell was occupied, there can be no more valid moves in this direction
 						}
 					}
+					break; // can't pass a piece then find another hurdle
 				}
 			}
 		}
