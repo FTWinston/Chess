@@ -175,7 +175,7 @@ MoveStep = new Class({
 	checkStateAndRemovePiece: function(game, state, coord, stateOwner) {
 		if ( this.piece.pieceState != state ) // piece isn't in the expected state, quit
 		{
-			console.log("state is wrong: got " + this.piece.pieceState + ", expected " + state); // todo: remove debug message
+			console.log("state is wrong: got " + this.piece.pieceState + ", expected " + state + ' for ' + this.piece.ownerPlayer.name + '\'s ' + this.piece.pieceType.name); // todo: remove debug message
 			return false;
 		}
 			
@@ -184,7 +184,7 @@ MoveStep = new Class({
 		case Piece.State.OnBoard:
 			if ( this.piece.position != coord )
 			{
-				console.log("position is wrong: got " + this.piece.position + ", expected " + coord); // todo: remove debug message
+				console.log("position is wrong: got " + this.piece.position + ", expected " + coord + ' for ' + this.piece.ownerPlayer.name + '\'s ' + this.piece.pieceType.name); // todo: remove debug message
 				return false;
 			}
 			this.piece.ownerPlayer.piecesOnBoard.removeItem(this.piece);

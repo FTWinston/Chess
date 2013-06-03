@@ -840,7 +840,7 @@ Shoot = new Class({
 							continue; // nothing to shoot here, or a piece we can't capture
 
 						var newMove = move.clone();
-						newMove.addStep(MoveStep.CreateCapture(target, target.Position, piece.ownerPlayer, game.rules.holdCapturedPieces));
+						newMove.addStep(MoveStep.CreateCapture(target, target.position, piece.ownerPlayer, game.rules.holdCapturedPieces));
 						newMove.addPieceReference(target, "target");
 						
 						if (this.conditions.isSatisfied(newMove, game))
