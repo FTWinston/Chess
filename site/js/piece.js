@@ -68,7 +68,7 @@ Piece = new Class({
 			return this.pieceType.royalty == PieceType.RoyalState.Royal;
 		if ( strType == "antiroyal" )
 			return this.pieceType.royalty == PieceType.RoyalState.AntiRoyal;
-		return this.pieceType.name == type;
+		return this.pieceType.name == strType;
 	},
 	
 	isThreatenedAt: function(game, testPos) {

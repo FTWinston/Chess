@@ -814,9 +814,12 @@ Shoot = new Class({
 						var newMove = move.clone();
 						newMove.addStep(MoveStep.CreateCapture(target, target.Position, piece.ownerPlayer, game.rules.holdCapturedPieces));
 						newMove.addPieceReference(target, "target");
+						
+						if (this.conditions.isSatisfied(newMove, game))
+							moves.push(newMove);
 					}
-				}
 			}
+		}
 		return moves;
 	}
 });
@@ -953,22 +956,24 @@ ReferencePiece = new Class({
 	appendValidNextSteps: function(move, piece, game, previousStep) {
 		// find piece based on the given parameters
 		var other = null;
-		
+		var moves = [];
 		if ( this.direction != null && this.distance != null )
 		{
 			var absDir = move.player.getAbsoluteDirection(this.direction, previousStep != null && previousStep.direction != null ? previousStep.direction : piece.ownerPlayer.forwardDir);
 			var distances = Distance.ParseValues(this.distance, null, previousStep, game.board.getMaxProjectionDistance(piece.position, absDir));
 		
-			for ( var dist = distances[0]; dist<distances[1]; dist++ )
+			for ( var dist = distances[0]; dist<=distances[1]; dist++ )
 			{
 				var targetCell = piece.position.offset(absDir, dist);
 				if ( game.board.isValidCell(targetCell) )
 				{
 					var testPiece = game.board.getPieceAt(targetCell);
-					if (testPiece != null && (this.otherOwner == MoveDefinition.Owner.Any || piece.getOwnerFromPlayer(testPiece.ownerPlayer) == this.otherOwner) && testPiece.typeMatches(this.otherType))
+					
+					if ((this.otherOwner == MoveDefinition.Owner.Any || piece.ownerPlayer.getOwnerFromPlayer(testPiece.ownerPlayer) == this.otherOwner) && testPiece.typeMatches(this.otherType))
 					{
-						other = testPiece;
-						break;
+						var newMove = move.clone();
+						newMove.addPieceReference(testPiece, this.refName);
+						moves.push(newMove);
 					}
 				}
 			}
@@ -981,15 +986,13 @@ ReferencePiece = new Class({
 				var testPiece = allPieces[i];
 				if ( this.otherOwner == MoveDefinition.Owner.Any || piece.getOwnerFromPlayer(testPiece.ownerPlayer) == this.otherOwner )
 				{
-					other = testPiece;
-					break; // got one, that'll do
+					var newMove = move.clone();
+					newMove.addPieceReference(testPiece, this.refName);
+					moves.push(newMove);
 				}
 			}
 		}
-		
-		if (other != null)
-			move.addPieceReference(other, this.refName);
-		return [];
+		return moves;
 	}
 });
 
@@ -1105,9 +1108,8 @@ MoveGroup = new Class({
 					var prevMove = prevStepMoves[j];
 					for ( var doStep = 0; doStep < prevMove.steps.length; doStep++ )
 						prevMove.steps[doStep].perform(game);
-				
+
 					var nextMovesForStep = step.appendValidNextSteps(prevMove, piece, game, prevMove.steps.length > 0 ? prevMove.steps[prevMove.steps.length-1] : previousStep);
-					
 					
 					console.log("MoveGroup got " + nextMovesForStep.length + " possible moves from step " + i);
 					
