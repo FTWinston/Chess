@@ -434,6 +434,13 @@ Slide = new Class({
 		var moves = [];
 		var absDirs = move.player.getAbsoluteDirections(this.dirs, previousStep != null && previousStep.direction != null ? previousStep.direction : piece.ownerPlayer.forwardDir);
 		
+		if ( this.piece != 'self' )
+		{
+			piece = move.getPieceByRef(this.piece);
+			if ( piece == undefined )
+				console.log('piece ref not found: ' + this.piece);
+		}
+		
 		for ( var i=0; i<absDirs.length; i++ )
 		{
 			var absDir = absDirs[i];
@@ -518,6 +525,13 @@ Leap = new Class({
 	appendValidNextSteps: function(move, piece, game, previousStep) {
 		var moves = [];
 
+		if ( this.piece != 'self' )
+		{
+			piece = move.getPieceByRef(this.piece);
+			if ( piece == undefined )
+				console.log('piece ref not found: ' + this.piece);
+		}
+		
 		var absDirs = move.player.getAbsoluteDirections(this.dirs, previousStep != null && previousStep.direction != null ? previousStep.direction : piece.ownerPlayer.forwardDir);
 		
 		for ( var i=0; i<absDirs.length; i++ )
@@ -669,6 +683,13 @@ Hop = new Class({
 	appendValidNextSteps: function(move, piece, game, previousStep) {
 		var moves = [];
 		
+		if ( this.piece != 'self' )
+		{
+			piece = move.getPieceByRef(this.piece);
+			if ( piece == undefined )
+				console.log('piece ref not found: ' + this.piece);
+		}
+		
 		var absDirs = move.player.getAbsoluteDirections(this.dirs, previousStep != null && previousStep.direction != null ? previousStep.direction : piece.ownerPlayer.forwardDir);
 		
 		for ( var i=0; i<absDirs.length; i++ )
@@ -784,6 +805,13 @@ Shoot = new Class({
 	
 	appendValidNextSteps: function(move, piece, game, previousStep) {
 		var moves = [];
+		
+		if ( this.piece != 'self' )
+		{
+			piece = move.getPieceByRef(this.piece);
+			if ( piece == undefined )
+				console.log('piece ref not found: ' + this.piece);
+		}
 		
 		var absDirs = move.player.getAbsoluteDirections(this.dirs, previousStep != null && previousStep.direction != null ? previousStep.direction : piece.ownerPlayer.forwardDir);
 		
