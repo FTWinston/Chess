@@ -1003,7 +1003,8 @@ ReferencePiece = new Class({
 				if ( game.board.isValidCell(targetCell) )
 				{
 					var testPiece = game.board.getPieceAt(targetCell);
-					
+					if ( testPiece == null )
+						continue;
 					if ((this.otherOwner == MoveDefinition.Owner.Any || piece.ownerPlayer.getOwnerFromPlayer(testPiece.ownerPlayer) == this.otherOwner) && testPiece.typeMatches(this.otherType))
 					{
 						var newMove = move.clone();
