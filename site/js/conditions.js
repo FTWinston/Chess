@@ -74,102 +74,105 @@ Condition.loadConditionsForGroup = function(group, conds) {
 			var vari = Condition.readComparisonVariable(child.attr("var"));
 			var type = Condition.readComparisonType(child.attr("comparison"));
 			var value = new ComparisonValue(child.text());
-			/*
-			group.elements.push(new Condition_Compare(var, type, value));*/
+			/*group.elements.push(new Condition_Compare(var, type, value));*/
 			break;
-/*
+
 		case "type":
 			{
-				string of = child.Attributes["of"].InnerText;
-				group.elements.push(new Condition_Type(of, child.InnerText));
+				var of = child.attr("of")
+				var type = child.text();
+				/*group.elements.push(new Condition_Type(of, type));*/
 				break;
 			}
 		case "owner":
 			{
-				string of = child.Attributes["of"].InnerText;
-				group.elements.push(new Condition_Owner(of, child.ReadOwner()));
+				var of = child.attr("of");
+				var owner = XmlHelper.ReadOwner(child.text());
+				/*group.elements.push(new Condition_Owner(of, owner));*/
 				break;
 			}
 		case "threatened":
-			MoveDefinition.PartOfMove where = child.ReadPartOfMove("where");
-			group.elements.push(new Condition_Threatened(where, child.ReadBool()));
+			var where = XmlHelper.readPartOfMove(child.attr("where"));
+			var threatened = XmlHelper.readBool(child.text());
+			/*group.elements.push(new Condition_Threatened(where, threatened));*/
 			break;
 		case "num_pieces_in_range":
 			{
-				string type = child.Attributes["type"].InnerText;
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				ComparisonValue rankMin = new ComparisonValue(child.attr("rank_min"));
-				ComparisonValue rankMax = new ComparisonValue(child.attr("rank_max"));
-				ComparisonValue colMin = new ComparisonValue(child.attr("col_min"));
-				ComparisonValue colMax = new ComparisonValue(child.attr("col_max"));
-				ComparisonType comparison = child.ReadComparisonType("comparison");
-				ComparisonValue value = new ComparisonValue(child.text());
+				var type = child.attr("type");
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				var rankMin = new ComparisonValue(child.attr("rank_min"));
+				var rankMax = new ComparisonValue(child.attr("rank_max"));
+				var colMin = new ComparisonValue(child.attr("col_min"));
+				var colMax = new ComparisonValue(child.attr("col_max"));
+				var comparison = Condition.readComparisonType(child.attr("comparison"));
+				var value = new ComparisonValue(child.text());
 
-				group.elements.push(new Condition_NumPiecesInRange(type, owner, rankMin, rankMax, colMin, colMax, comparison, value));
+				/*group.elements.push(new Condition_NumPiecesInRange(type, owner, rankMin, rankMax, colMin, colMax, comparison, value));*/
 				break;
 			}
 		case "move_causes_check":
-			group.elements.push(new Condition_MoveCausesCheck(child.ReadBool()));
+			var check = XmlHelper.readBool(child.text());
+			/*group.elements.push(new Condition_MoveCausesCheck(check));*/
 			break;
 		case "move_causes_checkmate":
-			group.elements.push(new Condition_MoveCausesCheckmate(child.ReadBool()));
+			var mate = XmlHelper.readBool(child.text());
+			/*group.elements.push(new Condition_MoveCausesCheckmate(mate));*/
 			break;
 		case "checkmate":
 			{
-				string num = child.AttributeOrDefault("num", "any");
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				group.elements.push(new Condition_Checkmate(num, type, owner));
+				var num = child.attr("num"); if ( num == undefined ) num = "any";
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				/*group.elements.push(new Condition_Checkmate(num, type, owner));*/
 				break;
 			}
 		case "pieces_threatened":
 			{
-				string num = child.AttributeOrDefault("num", "any");
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				group.elements.push(new Condition_PiecesThreatened(num, type, owner));
+				var num = child.attr("num"); if ( num == undefined ) num = "any";
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				/*group.elements.push(new Condition_PiecesThreatened(num, type, owner));*/
 				break;
 			}
 		case "repeated_check":
 			{
-				int duration = child.AttributeOrDefaultInt("duration", 1);
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				group.elements.push(new Condition_RepeatedCheck(duration, type, owner));
+				var dur = child.attr("duration"); if ( dur == undefined ) dur = 1;
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				/*group.elements.push(new Condition_RepeatedCheck(duration, type, owner));*/
 				break;
 			}
 		case "no_moves_possible":
 			{
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner player = child.ReadOwner("player");
-				group.elements.push(new Condition_NoMovesPossible(type, player));
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var player = XmlHelper.ReadOwner(child.attr("player"));
+				/*group.elements.push(new Condition_NoMovesPossible(type, player));*/
 				break;
 			}
 		case "repetition_of_position":
 			{
-				int occurances = child.AttributeOrDefaultInt("occurances", 1);
-				group.elements.push(new Condition_RepetitionOfPosition(occurances));
+				var occurances = child.attr("occurances"); if ( occurances == undefined ) occurances = 1;
+				/*group.elements.push(new Condition_RepetitionOfPosition(occurances));*/
 				break;
 			}
 		case "turns_since_last_capture":
 			{
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				Condition.ComparisonType comparison = child.ReadComparisonType("comparison");
-				ComparisonValue value = new ComparisonValue(child.text());
-				group.elements.push(new Condition_TurnsSinceLastCapture(type, owner, comparison, value));
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				var type = Condition.readComparisonType(child.attr("comparison"));
+				var value = new ComparisonValue(child.text());
+				/*group.elements.push(new Condition_TurnsSinceLastCapture(type, owner, comparison, value));*/
 				break;
 			}
 		case "turns_since_last_move":
 			{
-				string type = child.AttributeOrDefault("type", "any");
-				MoveDefinition.Owner owner = child.ReadOwner("owner");
-				Condition.ComparisonType comparison = child.ReadComparisonType("comparison");
-				ComparisonValue value = new ComparisonValue(child.text());
-				group.elements.push(new Condition_TurnsSinceLastMove(type, owner, comparison, value));
+				var type = child.attr("type"); if ( type == undefined ) type = "any";
+				var owner = XmlHelper.ReadOwner(child.attr("owner"));
+				var type = Condition.readComparisonType(child.attr("comparison"));
+				var value = new ComparisonValue(child.text());
+				/*group.elements.push(new Condition_TurnsSinceLastMove(type, owner, comparison, value));*/
 				break;
 			}
-*/			
 		default:
 			throw "Unexpected condition node name: " + child.Name;
 		}
@@ -182,22 +185,22 @@ Condition.readComparisonVariable = function(val) {
 		return Condition.ComparisonVariable.Rank;
 	switch (val)
 	{
-		case "rank":
-			return Condition.ComparisonVariable.Rank;
-		case "column":
-			return Condition.ComparisonVariable.Column;
-		case "destination rank":
-			return Condition.ComparisonVariable.DestinationRank;
-		case "destination column":
-			return Condition.ComparisonVariable.DestinationColumn;
-		case "piece move number":
-			return Condition.ComparisonVariable.PieceMoveNumber;
-		case "target move number":
-			return Condition.ComparisonVariable.TargetMoveNumber;
-		case "game turn":
-			return Condition.ComparisonVariable.GameTurn;
-		default:
-			throw "Unexpected comparison var: " + val;
+	case "rank":
+		return Condition.ComparisonVariable.Rank;
+	case "column":
+		return Condition.ComparisonVariable.Column;
+	case "destination rank":
+		return Condition.ComparisonVariable.DestinationRank;
+	case "destination column":
+		return Condition.ComparisonVariable.DestinationColumn;
+	case "piece move number":
+		return Condition.ComparisonVariable.PieceMoveNumber;
+	case "target move number":
+		return Condition.ComparisonVariable.TargetMoveNumber;
+	case "game turn":
+		return Condition.ComparisonVariable.GameTurn;
+	default:
+		throw "Unexpected comparison var: " + val;
 	}
 }
 

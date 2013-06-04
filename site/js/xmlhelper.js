@@ -6,22 +6,6 @@ XmlHelper.readBool = function(val) {
 	return true;
 }
 
-
-XmlHelper.textOrDefault = function(node, defaultValue) {
-	var val = $(node).text();
-	if ( val == undefined )
-		return defaultValue;
-	return val;
-}
-
-XmlHelper.attributeOrDefault = function(node, attrName, defaultValue)
-{
-	var val = $(node).attr(attrName);
-	if ( val == undefined )
-		return defaultValue;
-	return val;
-}
-
 XmlHelper.readDistance = function(node, attrName) {
 	if ( node == null )
 		return null;
@@ -76,11 +60,7 @@ XmlHelper.readPartOfTurn = function(node, attrName) {
 		throw "Unexpected part-of-turn value: " + val;
 }
 
-XmlHelper.readPartOfMove = function(node, attrName) {
-	if ( node == null )
-		return MoveDefinition.PartOfMove.WholeRoute;
-
-	var val = $(node).attr(attrName);
+XmlHelper.readPartOfMove = function(val) {
 	if ( val == undefined )
 		return MoveDefinition.PartOfMove.WholeRoute;
 
@@ -92,4 +72,23 @@ XmlHelper.readPartOfMove = function(node, attrName) {
 		return MoveDefinition.PartOfMove.Destination;
 	else
 		throw "Unexpected part-of-move value: " + val;
+}
+
+XmlHelper.readOwner = function(val) {
+	if (val == undefined)
+		return MoveDefinition.Owner.Any;
+
+	switch (val)
+	{
+		case "any":
+			return MoveDefinition.Owner.Any;
+		case "self":
+			return MoveDefinition.Owner.Self;
+		case "enemy":
+			return MoveDefinition.Owner.Enemy;
+		case "ally":
+			return MoveDefinition.Owner.Ally;
+		default:
+			throw "Unexpected owner: " + val;
+	}
 }
