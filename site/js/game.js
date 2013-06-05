@@ -31,7 +31,7 @@ Game = new Class({
 		//if ( move.moveNumber == this.moveNumber && ... && move.perform(this) )
 	
 		if ( move.perform(this, true, animate) )
-			console.log(piece.ownerPlayer.name + " " + piece.pieceType.name + " at " + oldPos.getName() + " moving to " + piece.position.getName()); // todo: fixme: piece position hasn't changed! eh???
+			console.log(piece.ownerPlayer.name + " " + piece.pieceType.name + " at " + oldPos.getName() + " moving to " + piece.position.getName()); // todo: log moves onto the screen instead?
 		else
 		{
 			console.log("error, cannot move");

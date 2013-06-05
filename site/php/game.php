@@ -54,7 +54,7 @@ $(function() {
 <div id="game"></div>
 
 <div id="gameSidebar">
-<span id="zoomIn">Zoom in</span> <span id="zoomOut">Zoom out</span>
+<span id="zoomOut">-</span> <span id="zoomAuto">Zoom</span> <span id="zoomIn">+</span>
 </div>';
 }
 

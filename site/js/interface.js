@@ -8,8 +8,9 @@ function initiateGame(definition, cellRefMode) {
 	success: parseXml
   });
   
-  $("#zoomIn").button().click(function() { changeZoom(true); });
-  $("#zoomOut").button().click(function() { changeZoom(false); });
+  $("#zoomIn").button().click(function() { zoom += 0.1; setZoom(); });
+  $("#zoomOut").button().click(function() { if ( zoom > 0.1 ) zoom -= 0.1; setZoom(); });
+  $("#zoomAuto").button().click(function() { zoomAuto(); });
 }
 
 var game;
@@ -20,12 +21,19 @@ function parseXml(xml) {
 }
 
 var zoom = 1;
-function changeZoom(zoomIn) {
-	if ( zoomIn )
-		zoom += 0.1;
-	else if ( zoom > 0.1 )
-		zoom -= 0.1;
+function zoomAuto() {
+	var maxVertical = $(window).height() / $('#game').outerHeight(true);
+	var maxHoriz = ($(window).width() - $('#gameSidebar').outerWidth(true)) / $('#game').outerWidth(true);
 	
+	var newZoom = Math.min(maxVertical, maxHoriz);
+	if ( newZoom == zoom )
+		zoom = 1;
+	else
+		zoom = newZoom;
+	setZoom();
+}
+
+function setZoom() {
 	$("#game").css({
 		"zoom": zoom, // IE, Safari, Chrome
 		"-moz-transform": "scale(" + zoom + ")", // Firefox

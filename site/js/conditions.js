@@ -1,8 +1,5 @@
-// todo: write all this
 Condition = new Class({
-	initialize: function() {
-		
-    },
+	initialize: function() {},
 	
 	isSatisfied: function(move, game) { return true; }
 });
@@ -587,7 +584,7 @@ Condition.Checkmate = new Class({
 	},
 	
 	isSatisfied: function(move, game) {
-		throw "Condition.MoveCausesCheckmate has not been implemented";
+		throw "Condition.Checkmate has not been implemented";
 	}
 });
 
