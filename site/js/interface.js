@@ -27,7 +27,7 @@ var zoom = 1;
 var autoZoom = true;
 function zoomAuto() {
 	var maxVertical = $(window).height() / $('#game').outerHeight(true);
-	var maxHoriz = ($(window).width() - $('#gameSidebar').outerWidth(true)) / $('#game').outerWidth(true);
+	var maxHoriz = ($(window).width() - $('#gameSidebar').outerWidth(true) - 4) / $('#game').outerWidth(true);
 	
 	zoom = Math.min(maxVertical, maxHoriz);
 	setZoom();
@@ -44,6 +44,7 @@ function setZoom() {
 		"-webkit-transform-origin": "0 0"*/
 	});
 	
+	$("#gameSidebar").css('left', ($('#game').outerWidth(true) * zoom)+'px');
 	$("#log").height($(window).height()-64);
 }
 

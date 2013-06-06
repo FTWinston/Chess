@@ -8,8 +8,7 @@
 
 #gameSidebar
 {
-	position: relative;
-	float: left;
+	position: absolute;
 	width: 180px;
 	top: 4px;
 	border: solid 1px white;
