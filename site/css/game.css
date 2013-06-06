@@ -11,6 +11,20 @@
 	position: relative;
 	float: left;
 	width: 180px;
+	top: 4px;
+	border: solid 1px white;
+}
+
+#log
+{
+	overflow: scroll;
+	overflow-x: hidden;
+	margin-bottom: 0px;
+}
+
+#log li
+{
+	text-align: left;
 }
 
 .cell

@@ -8,28 +8,28 @@ function initiateGame(definition, cellRefMode) {
 	success: parseXml
   });
   
-  $("#zoomIn").button().click(function() { zoom += 0.1; setZoom(); });
-  $("#zoomOut").button().click(function() { if ( zoom > 0.1 ) zoom -= 0.1; setZoom(); });
-  $("#zoomAuto").button().click(function() { zoomAuto(); });
+  $("#zoomIn").button().click(function() { autoZoom = false; $("#zoomAuto").show(); zoom += 0.1; setZoom(); });
+  $("#zoomOut").button().click(function() { autoZoom = false; $("#zoomAuto").show(); if ( zoom > 0.1 ) zoom -= 0.1; setZoom(); });
+  $("#zoomAuto").button().click(function() { $(this).hide(); zoomAuto(); autoZoom = true; });
 }
 
 var game;
 function parseXml(xml) {
 	var board = new Board($("#game"), cellRefs, supportsSVG());
-	game = new Game(board, xml, true);
+	game = new Game(board, xml,	true);
 	game.board.render();
+	
+	zoomAuto();
+	$(window).resize(function() { if ( autoZoom ) zoomAuto(); });
 }
 
 var zoom = 1;
+var autoZoom = true;
 function zoomAuto() {
 	var maxVertical = $(window).height() / $('#game').outerHeight(true);
 	var maxHoriz = ($(window).width() - $('#gameSidebar').outerWidth(true)) / $('#game').outerWidth(true);
 	
-	var newZoom = Math.min(maxVertical, maxHoriz);
-	if ( newZoom == zoom )
-		zoom = 1;
-	else
-		zoom = newZoom;
+	zoom = Math.min(maxVertical, maxHoriz);
 	setZoom();
 }
 
@@ -43,6 +43,8 @@ function setZoom() {
 		"-webkit-transform": "scale(" + zoom + ")", // Safari and Chrome
 		"-webkit-transform-origin": "0 0"*/
 	});
+	
+	$("#log").height($(window).height()-64);
 }
 
 function supportsSVG() {
