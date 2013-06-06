@@ -31,7 +31,9 @@ Game = new Class({
 		//if ( move.moveNumber == this.moveNumber && ... && move.perform(this) )
 	
 		if ( move.perform(this, true, animate) )
-			$("#log").append('<li>' + piece.ownerPlayer.name.substr(0,1).toUpperCase() + " " + piece.pieceType.name + " " + oldPos.getName() + " -&gt; " + piece.position.getName() + '</li>');
+			$("#log")
+				.append('<li>' + piece.ownerPlayer.name.substr(0,1).toUpperCase() + " " + piece.pieceType.name + " " + oldPos.getName() + " -&gt; " + piece.position.getName() + '</li>')
+				.children().last()[0].scrollIntoView();
 		else
 		{
 			console.log("error, cannot move");
